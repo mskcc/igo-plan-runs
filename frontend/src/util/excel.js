@@ -41,7 +41,7 @@ export const exportExcel = (runs, columns) => {
   };
   headerRow.height = 20;
   headerRow.font = { bold: true };
-
+  // runplanner.addRows(runs);
   // FILL
   columns.forEach((columnDef) => {
     // SKIP hidden columns
@@ -53,7 +53,15 @@ export const exportExcel = (runs, columns) => {
     //  need to do this in the column loop because adding dataValidation to a cell creates new rows
     for (let i = 0; i < runs.length + 10; i++) {
       let cell = runplanner.getRow(i + 2).getCell(`${columnDef.data}`);
-      cell.value = runs[i] ? runs[i][columnDef.data] : '';
+      runs[i] && console.log(runs[i][columnDef.data]);
+      if (runs[i]) {
+        cell.value = runs[i][columnDef.data];
+        if (columnDef.type === 'numeric' && cell.value !== '') {
+          cell.value = parseFloat(cell.value);
+        }
+      } else {
+        cell.value = '';
+      }
     }
   });
   workbook.xlsx.writeBuffer().then(function (data) {

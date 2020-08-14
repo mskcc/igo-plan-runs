@@ -12,15 +12,15 @@ const columns = [
   { columnHeader: 'Other Sample ID', data: 'otherSampleId', editor: false },
   { columnHeader: 'Recipe', data: 'recipe', editor: false },
   { columnHeader: 'Tumor/Normal', data: 'tumor', editor: false },
-  { columnHeader: 'Pool Conc.', data: 'concentration', editor: false },
+  { columnHeader: 'Pool Conc.', data: 'concentration', editor: false, type: 'numeric' },
   { columnHeader: 'Request ID', data: 'requestId', editor: false },
   // { columnHeader: 'Status', data: 'status', editor:false },
   // { columnHeader: 'Awaiting Samples', data: 'awaitingSamples', editor:false },
   // { columnHeader: 'Sequencer', data: 'sequencer', editor:false },
   // { columnHeader: 'Batch Week', data: 'batchWeek', editor:false },
-  { columnHeader: 'Sample Conc.', data: 'altConcentration', editor: false },
+  { columnHeader: 'Sample Conc.', data: 'altConcentration', editor: false, type: 'numeric' },
   { columnHeader: 'Units', data: 'concentrationUnits', editor: false },
-  { columnHeader: 'Volume', data: 'volume', editor: false },
+  { columnHeader: 'Volume', data: 'volume', editor: false, type: 'numeric' },
   { columnHeader: 'Source Plate ID', data: 'plateId', editor: false },
   { columnHeader: 'Well Position', data: 'wellPos', editor: false },
   { columnHeader: 'Barcode Sequence', data: 'barcodeSeq', editor: false },
@@ -30,6 +30,7 @@ const columns = [
     columnHeader: 'Seq. Read Reqs.',
     data: 'readNum',
     editor: false,
+    type: 'numeric',
   },
   // { columnHeader: 'Micronic Barcode', data: 'micronicBarcode', editor:false },
 ];
@@ -47,6 +48,7 @@ exports.getRuns = [
 
     cache
       .get(key, retrievalFunction)
+    // getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
         return apiResponse.successResponseWithData(res, 'success', {
