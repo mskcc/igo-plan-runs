@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import HomePage from './home-page';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Header from './Header';
@@ -33,8 +32,7 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          <Route path="/" component={HomePage} />
-          <Route path="/home" component={HomePage} />
+          <Route path='/' component={Table} />
         </Switch>
       </Router>
     </MuiThemeProvider>

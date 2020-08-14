@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Avatar,
-  AppBar,
-  Toolbar,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { Avatar, AppBar, Toolbar, Typography, makeStyles } from '@material-ui/core';
 
 import logo from './logo.png';
 
@@ -13,11 +7,11 @@ function Header() {
   const classes = useStyles();
 
   return (
-    <AppBar position="static" title={logo} className={classes.header}>
+    <AppBar position='static' title={logo} className={classes.header}>
       <Toolbar>
-        <Avatar alt="mskcc logo" src={logo} className={classes.avatar} />
+        <Avatar alt='mskcc logo' src={logo} className={classes.avatar} />
 
-        <Typography color="inherit" variant="h6" className={classes.title}>
+        <Typography color='inherit' variant='h6' className={classes.title}>
           IGO Run Planner
         </Typography>
       </Toolbar>

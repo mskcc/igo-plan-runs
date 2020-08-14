@@ -1,8 +1,8 @@
 var express = require('express');
-var quoteRouter = require('./quote');
+var runController = require('./runs');
 
 var app = express();
 
-app.use('/quote/', quoteRouter);
+app.use('/runs/', runController);
 
 module.exports = app;
