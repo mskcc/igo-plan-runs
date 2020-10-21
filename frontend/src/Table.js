@@ -8,9 +8,10 @@ import LoadingOverlay from 'react-loading-overlay';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    height: '100vh',
-    width: '100vw',
+    height: '90vh',
+    width: '95vw',
     margin: '0 auto',
+    marginBottom: '3em',
     overflow: 'auto',
   },
   toolbar: {
