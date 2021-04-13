@@ -38,7 +38,7 @@ const columns = [
     type: 'numeric',
   },
   {
-    columnHeader: 'Reads Total',
+    columnHeader: 'Reads Achieved',
     data: 'readTotal',
     editor: false,
     type: 'numeric',
@@ -57,9 +57,9 @@ exports.getRuns = [
     let key = 'RUNS';
     let retrievalFunction = () => getRuns();
 
-    cache
-      .get(key, retrievalFunction)
-    // getRuns()
+    // cache
+    //   .get(key, retrievalFunction)
+    getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
         return apiResponse.successResponseWithData(res, 'success', {
