@@ -58,6 +58,12 @@ function HomePage() {
   };
   async function handleRuns() {
     getRuns().then((result) => {
+      result.rows.map(row => {
+        console.log(row.readTotal)
+        row.readTotal = parseInt(row.readTotal/1000000);
+        row.remainingReads = parseInt(row.remainingReads/1000000);
+        return row;
+      })
       setRuns(result.rows);
       setFilteredRuns(result.rows);
       setColumns(result.columns);

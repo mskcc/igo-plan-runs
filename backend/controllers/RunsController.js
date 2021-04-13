@@ -57,8 +57,7 @@ exports.getRuns = [
     let key = 'RUNS';
     let retrievalFunction = () => getRuns();
 
-    // cache
-    //   .get(key, retrievalFunction)
+    
     getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
