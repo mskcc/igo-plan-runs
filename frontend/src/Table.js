@@ -16,30 +16,6 @@ import LoadingOverlay from 'react-loading-overlay';
 // })
 
 
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  const { clientWidth: width2, clientHeight: height2} = document.documentElement;
-  let tableHeight = height - 100;
-  return {
-    tableHeight
-  };
-}
-
-// function useWindowDimensions() {
-//   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-//   useEffect(() => {
-//     function handleResize() {
-//       setWindowDimensions(getWindowDimensions());
-//     }
-
-//     window.addEventListener('resize', handleResize);
-//     return () => window.removeEventListener('resize', handleResize);
-//   }, []);
-
-//   return windowDimensions;
-// }
-
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -56,10 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function HomePage() {
-  const { tableHeight, width } = getWindowDimensions();
-  let newHeight = 500;
- console.log('table', tableHeight)
- console.log(newHeight);
+
   const classes = useStyles();
   const hotTableComponent = React.createRef();
   const [runs, setRuns] = useState({
@@ -74,7 +47,7 @@ function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [sorting, setSorting] = React.useState(true);
-
+  const [sortedExcelData, setSortedExcelData] = React.useState([]);
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     let searchTerm = event.target.value;
@@ -97,6 +70,8 @@ function HomePage() {
   };
   async function handleRuns() {
     getRuns().then((result) => {
+      console.log(result.rows);
+      
       result.rows.map(row => {
         console.log(row.readTotal)
         row.readTotal = parseInt(row.readTotal/1000000);

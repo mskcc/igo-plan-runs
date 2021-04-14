@@ -14,6 +14,7 @@ const columns = [
   { columnHeader: 'Tumor/Normal', data: 'tumor', editor: false },
   { columnHeader: 'Pool Conc.', data: 'concentration', editor: false, type: 'numeric' },
   { columnHeader: 'Request ID', data: 'requestId', editor: false },
+  { columnHeader: 'Request Name', data: 'requestName', editor:false},
   // { columnHeader: 'Status', data: 'status', editor:false },
   // { columnHeader: 'Awaiting Samples', data: 'awaitingSamples', editor:false },
   // { columnHeader: 'Sequencer', data: 'sequencer', editor:false },
