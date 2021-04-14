@@ -2,9 +2,44 @@ import React, { useState, useEffect } from 'react';
 import { getRuns } from './services/services';
 import { exportExcel } from './util/excel';
 import { makeStyles, TextField, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.css';
 import LoadingOverlay from 'react-loading-overlay';
+
+// const styles = (theme) => ({
+//   container: {
+//     width: '100%',
+//     overflowX: 'auto',
+//     display:'grid'
+//   }
+// })
+
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  const { clientWidth: width2, clientHeight: height2} = document.documentElement;
+  let tableHeight = height - 100;
+  return {
+    tableHeight
+  };
+}
+
+// function useWindowDimensions() {
+//   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+//   useEffect(() => {
+//     function handleResize() {
+//       setWindowDimensions(getWindowDimensions());
+//     }
+
+//     window.addEventListener('resize', handleResize);
+//     return () => window.removeEventListener('resize', handleResize);
+//   }, []);
+
+//   return windowDimensions;
+// }
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -12,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     width: '95vw',
     margin: '0 auto',
     marginBottom: '3em',
-    overflow: 'auto',
+    overflow: 'auto'
   },
   toolbar: {
     margin: theme.spacing(2),
@@ -21,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function HomePage() {
+  const { tableHeight, width } = getWindowDimensions();
+  let newHeight = 500;
+ console.log('table', tableHeight)
+ console.log(newHeight);
   const classes = useStyles();
   const hotTableComponent = React.createRef();
   const [runs, setRuns] = useState({
@@ -75,7 +114,7 @@ function HomePage() {
     setIsLoading(true);
     handleRuns();
   }, []);
-
+ 
   return (
     <div className={classes.container}>
       <LoadingOverlay active={isLoading} spinner text='Loading...'>
@@ -97,6 +136,9 @@ function HomePage() {
           licenseKey='non-commercial-and-evaluation'
           rowHeaders={true}
           stretchH='all'
+          height='700'
+          
+         
         />
       </LoadingOverlay>
     </div>

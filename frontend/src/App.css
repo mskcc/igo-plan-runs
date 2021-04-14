@@ -7,4 +7,31 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   font-size: 15px;
+  overflow: hidden;
 }
+
+html {
+  overflow: hidden;
+}
+
+/* .handsontable {
+  width: 99vw;
+  height: 90vh;
+  overflow-x: auto;
+} */
+
+.makeStyles-container-4 {
+  overflow:hidden !important;
+}
+
+.ht_master {
+  overflow: auto !important;
+}
+
+/* 
+div[id^="hot-"] {
+  overflow-x: auto !important;
+  
+ 
+} */
+
