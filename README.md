@@ -1,3 +1,3 @@
 # IGO Run Planner
 
-Shows ready to go runs.
+Show samples ready for pooling that will be placed on a sequencer.
