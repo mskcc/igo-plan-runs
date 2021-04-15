@@ -7,13 +7,6 @@ import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.css';
 import LoadingOverlay from 'react-loading-overlay';
 
-// const styles = (theme) => ({
-//   container: {
-//     width: '100%',
-//     overflowX: 'auto',
-//     display:'grid'
-//   }
-// })
 
 
 
@@ -47,7 +40,7 @@ function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [sorting, setSorting] = React.useState(true);
-  const [sortedExcelData, setSortedExcelData] = React.useState([]);
+  // const [sortedExcelData, setSortedExcelData] = React.useState([]);
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     let searchTerm = event.target.value;
@@ -70,10 +63,25 @@ function HomePage() {
   };
   async function handleRuns() {
     getRuns().then((result) => {
-      console.log(result.rows);
-      
+     
+      let ascendingPools = result.rows.map(row => {
+        let res = []
+        res.push(row.pool)
+        let ascendingRes = res;
+        ascendingRes.sort((a,b) => a-b);
+        return ascendingRes
+      })
+      console.log(ascendingPools)
+      let ascendingSampleIds = result.rows.map(row => {
+        let res = []
+        res.push(row.sampleId)
+        let ascendingRes = res;
+        ascendingRes.sort((a,b) => a-b);
+        return ascendingRes
+      })
+      console.log("sampleId", ascendingSampleIds)
+      console.log("pools",ascendingPools)
       result.rows.map(row => {
-        console.log(row.readTotal)
         row.readTotal = parseInt(row.readTotal/1000000);
         row.remainingReads = parseInt(row.remainingReads/1000000);
         return row;
