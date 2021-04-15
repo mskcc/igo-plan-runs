@@ -5,6 +5,7 @@ const Cache = require('../helpers/cache');
 const ttl = 60 * 60 * 1; // cache for 1 Hour
 const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
+const { poolSameRunLength } = require('./PoolFunctions');
 
 const columns = [
   { columnHeader: 'Pool', data: 'pool', editor: false },
@@ -46,6 +47,11 @@ const columns = [
   },
   // { columnHeader: 'Micronic Barcode', data: 'micronicBarcode', editor:false },
 ];
+
+
+
+
+
 /**
  * Returns runs
  *
@@ -62,6 +68,11 @@ exports.getRuns = [
     getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
+        // poolSameRunLength(grid);
+        // console.log(poolSameRunLength(grid));
+
+
+
         return apiResponse.successResponseWithData(res, 'success', {
           rows: grid,
           columns: columns,

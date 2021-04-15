@@ -40,7 +40,7 @@ function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [sorting, setSorting] = React.useState(true);
-  // const [sortedExcelData, setSortedExcelData] = React.useState([]);
+
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     let searchTerm = event.target.value;
@@ -64,23 +64,6 @@ function HomePage() {
   async function handleRuns() {
     getRuns().then((result) => {
      
-      let ascendingPools = result.rows.map(row => {
-        let res = []
-        res.push(row.pool)
-        let ascendingRes = res;
-        ascendingRes.sort((a,b) => a-b);
-        return ascendingRes
-      })
-      console.log(ascendingPools)
-      let ascendingSampleIds = result.rows.map(row => {
-        let res = []
-        res.push(row.sampleId)
-        let ascendingRes = res;
-        ascendingRes.sort((a,b) => a-b);
-        return ascendingRes
-      })
-      console.log("sampleId", ascendingSampleIds)
-      console.log("pools",ascendingPools)
       result.rows.map(row => {
         row.readTotal = parseInt(row.readTotal/1000000);
         row.remainingReads = parseInt(row.remainingReads/1000000);
