@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { getRuns } from './services/services';
 import { exportExcel } from './util/excel';
 import { makeStyles, TextField, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.css';
 import LoadingOverlay from 'react-loading-overlay';
+
+
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -12,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     width: '95vw',
     margin: '0 auto',
     marginBottom: '3em',
-    overflow: 'auto',
+    overflow: 'auto'
   },
   toolbar: {
     margin: theme.spacing(2),
@@ -21,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function HomePage() {
+
   const classes = useStyles();
   const hotTableComponent = React.createRef();
   const [runs, setRuns] = useState({
@@ -58,6 +63,12 @@ function HomePage() {
   };
   async function handleRuns() {
     getRuns().then((result) => {
+     
+      result.rows.map(row => {
+        row.readTotal = parseInt(row.readTotal/1000000);
+        row.remainingReads = parseInt(row.remainingReads/1000000);
+        return row;
+      })
       setRuns(result.rows);
       setFilteredRuns(result.rows);
       setColumns(result.columns);
@@ -69,7 +80,7 @@ function HomePage() {
     setIsLoading(true);
     handleRuns();
   }, []);
-
+ 
   return (
     <div className={classes.container}>
       <LoadingOverlay active={isLoading} spinner text='Loading...'>
@@ -91,6 +102,9 @@ function HomePage() {
           licenseKey='non-commercial-and-evaluation'
           rowHeaders={true}
           stretchH='all'
+          height='700'
+          
+         
         />
       </LoadingOverlay>
     </div>
