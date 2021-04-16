@@ -37,10 +37,11 @@ function HomePage() {
   const [columns, setColumns] = useState({
     columns: [],
   });
+  
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [sorting, setSorting] = React.useState(true);
-
+  
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     let searchTerm = event.target.value;
@@ -69,9 +70,17 @@ function HomePage() {
         row.remainingReads = parseInt(row.remainingReads/1000000);
         return row;
       })
+      const rowsLen = result.rows.length;
+      const checkboxData = [];
+      for(let i = 0; i  <rowsLen; i++) {
+        checkboxData.push({excluded:true}, {excluded: false});
+      }
+
+      const checkboxColumn = {columnHeader: "Exclude From Planning", data:checkboxData, type: "checkbox"};
       setRuns(result.rows);
       setFilteredRuns(result.rows);
-      setColumns(result.columns);
+      setColumns(prev => [checkboxColumn, ...result.columns]);
+      
       setIsLoading(false);
     });
   }

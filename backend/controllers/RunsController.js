@@ -5,7 +5,9 @@ const Cache = require('../helpers/cache');
 const ttl = 60 * 60 * 1; // cache for 1 Hour
 const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
-const { poolSameRunLength } = require('./PoolFunctions');
+const { poolSameRunLength, poolSameLibrary,poolSameProject  } = require('./PoolFunctions');
+var fs = require('fs')
+
 
 const columns = [
   { columnHeader: 'Pool', data: 'pool', editor: false },
@@ -70,8 +72,23 @@ exports.getRuns = [
         let grid = generateGrid(result.data);
         // poolSameRunLength(grid);
         // console.log(poolSameRunLength(grid));
+        const runLengthJson = JSON.stringify(poolSameRunLength(grid));
+        fs.writeFile("sameRunLengthsMap.json", runLengthJson, function(err) {
+          if (err) throw err;
+          console.log('complete run lengths');
+          });
 
+          const libraryJson = JSON.stringify(poolSameLibrary(grid));
+        fs.writeFile("libraries.json", libraryJson, function(err) {
+          if (err) throw err;
+          console.log('complete library');
+          });
 
+          const projectJson = JSON.stringify(poolSameProject(grid));
+        fs.writeFile("projects.json", projectJson, function(err) {
+          if (err) throw err;
+          console.log('complete projects');
+          });
 
         return apiResponse.successResponseWithData(res, 'success', {
           rows: grid,
