@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     gap: '2em',
   },
 }));
-function HomePage() {
+function RunPage() {
 
   const classes = useStyles();
   const hotTableComponent = React.createRef();
@@ -92,13 +92,14 @@ function HomePage() {
   return (
     <div className={classes.container}>
       <LoadingOverlay active={isLoading} spinner text='Loading...'>
-        <div className={classes.toolbar}>
-          <TextField id='search' label='Search' variant='outlined' value={searchTerm} onChange={handleChange} />
-          <Button id='gridExport' onClick={handleExport} color='primary' variant='contained' type='submit'>
+        
+        <div className="tableGrid">
+          <div className="table1">
+            <div className="headerTable"><h4>Samples Ready For Run</h4>
+            <Button className="export" onClick={handleExport} color='primary' variant='contained' type='submit'>
             Export Excel
           </Button>
-        </div>
-       
+          </div>
         <HotTable
           ref={hotTableComponent}
           data={filteredRuns}
@@ -111,15 +112,56 @@ function HomePage() {
           licenseKey='non-commercial-and-evaluation'
           rowHeaders={true}
           stretchH='all'
-          height='700'
+          height='300'
         />
-        
-        
+        </div>
+        <div className="table2">
+        <div className="headerTable"><h4>Samples Ready For Lane</h4>
+            <Button className="export" onClick={handleExport} color='primary' variant='contained' type='submit'>
+            Export Excel
+          </Button>
+          </div>
+        <HotTable
+          ref={hotTableComponent}
+          data={filteredRuns}
+          search='true'
+          colHeaders={columns ? Object.keys(columns).map((el) => columns[el].columnHeader) : ''}
+          columns={columns}
+          filters='true'
+          columnSorting={sorting}
+          manualColumnResize={true}
+          licenseKey='non-commercial-and-evaluation'
+          rowHeaders={true}
+          stretchH='all'
+          height='300'
+        />
+        </div>
+        <div className="table3">
+        <div className="headerTable"><h4>Samples Not Ready Yet</h4>
+            <Button className="export" onClick={handleExport} color='primary' variant='contained' type='submit'>
+            Export Excel
+          </Button>
+          </div>
+        <HotTable
+          ref={hotTableComponent}
+          data={filteredRuns}
+          search='true'
+          colHeaders={columns ? Object.keys(columns).map((el) => columns[el].columnHeader) : ''}
+          columns={columns}
+          filters='true'
+          columnSorting={sorting}
+          manualColumnResize={true}
+          licenseKey='non-commercial-and-evaluation'
+          rowHeaders={true}
+          stretchH='all'
+          height='300'
+        />
+        </div>
 
-        
+        </div>
       </LoadingOverlay>
     </div>
   );
 }
 
-export default HomePage;
+export default RunPage;
