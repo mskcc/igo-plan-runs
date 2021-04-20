@@ -12,13 +12,17 @@ class Sample {
         this.readsRequested = readsRequested;
     }
     noIndexCollision = (lane) => { // if lane does not include barcode seqs that are the same, push sample to lane
-        if (!lane.includes(this.barcodeSeq)) {
+        let barcodes = []
+        for (let sample of lane) {
+            barcodes.push(sample.barcodeSeq);
+        }
+        if (!barcodes.includes(this.barcodeSeq)) {
             lane.push(this);
         }
     }
-    poolByReadLength = (lane) => { // 
+    poolByReadLength = (lane) => { //
         for(let sample of lane) {
-            if (this.runLength == sample.runLength){
+            if (sample.runLength == this.runLength) {
                 lane.push(this);
             }
         }
