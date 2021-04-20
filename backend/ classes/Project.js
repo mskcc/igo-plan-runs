@@ -7,13 +7,13 @@ class Project {
         this.recipe = recipe; // correlates with project
         this.requestName = requestName;
     }
-    userLibrary(lane, otherSample){
+    userLibrary(lane){
         if(this.requestId == otherSample.requestId) {
             lane.push(this);
         }
     }
     canBeSplit(lane){
-        for (let sample of lane) {
+        for (let sample of lane.samples) {
             if(this.recipe.includes("IDT_Exome") && sample.recipe.includes("IDT_Exome")) {
                 lane.push(this)
             }

@@ -7,8 +7,8 @@ const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength, poolSameLibrary,poolSameProject  } = require('./PoolFunctions');
 var fs = require('fs')
-const Project = require('./Project');
-const Sample = require('./Sample');
+const Project = require('../ classes/Project');
+const Sample = require('../ classes/Sample');
 
 const columns = [
   { columnHeader: 'Pool', data: 'pool', editor: false },
