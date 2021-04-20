@@ -7,7 +7,8 @@ const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength, poolSameLibrary,poolSameProject  } = require('./PoolFunctions');
 var fs = require('fs')
-
+const Project = require('./Project');
+const Sample = require('./Sample');
 
 const columns = [
   { columnHeader: 'Pool', data: 'pool', editor: false },
@@ -65,13 +66,20 @@ exports.getRuns = [
     logger.log('info', 'Retrieving random quote');
     let key = 'RUNS';
     let retrievalFunction = () => getRuns();
-
+    let lanes = [];
     
+   
     getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
         // poolSameRunLength(grid);
         // console.log(poolSameRunLength(grid));
+        for(let sample of grid) {
+          sampleChild = new Sample(sample.sampleId, sample.wellPos, sample.barcodeSeq, sample.tumor, sample.readNum)
+          lanes.push(sampleChild)
+        }
+
+
         const runLengthJson = JSON.stringify(poolSameRunLength(grid));
         fs.writeFile("sameRunLengthsMap.json", runLengthJson, function(err) {
           if (err) throw err;
