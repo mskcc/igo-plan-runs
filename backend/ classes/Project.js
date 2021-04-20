@@ -2,17 +2,17 @@
 
 class Project {
     constructor (requestId, runLength, recipe, requestName) {
-        this.requestId = requestId; //corresponds to a project
+        this.requestId = requestId; 
         this.runLength = runLength; 
-        this.recipe = recipe;
+        this.recipe = recipe; // correlates with project
         this.requestName = requestName;
     }
-    userLibrary = (lane, otherSample) => {
+    userLibrary(lane, otherSample){
         if(this.requestId == otherSample.requestId) {
             lane.push(this);
         }
     }
-    canBeSplit = (lane) => {
+    canBeSplit(lane){
         for (let sample of lane) {
             if(this.recipe.includes("IDT_Exome") && sample.recipe.includes("IDT_Exome")) {
                 lane.push(this)

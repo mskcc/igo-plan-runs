@@ -11,19 +11,21 @@ class Sample {
         this.runLength = runLength;
         this.readsRequested = readsRequested;
     }
-    noIndexCollision = (lane) => { // if lane does not include barcode seqs that are the same, push sample to lane
+    noIndexCollision(lane){ // if lane does not include barcode seqs that are the same, push sample to lane
         let barcodes = []
-        for (let sample of lane) {
+        for (let sample of lane.samples) {
             barcodes.push(sample.barcodeSeq);
         }
         if (!barcodes.includes(this.barcodeSeq)) {
-            lane.push(this);
+            lane.addSample(this);
         }
     }
-    poolByReadLength = (lane) => { //
-        for(let sample of lane) {
+    poolByReadLength(lane) { //
+        for(let sample of lane.samples) {
             if (sample.runLength == this.runLength) {
-                lane.push(this);
+                lane.addSample(this);
+            } else {
+                continue;
             }
         }
     }
