@@ -34,7 +34,9 @@ function HomePage() {
   
 
   
-  const [runs, setRuns] = useState([]);
+  const [runs, setRuns] = useState({
+    runs: [],
+  });
   const [filteredRuns, setFilteredRuns] = useState({
     filteredRuns: [],
   });
@@ -67,7 +69,9 @@ function HomePage() {
      requestIdRuns : []
   })
 
-  const [requestNameRuns, setRequestNameRuns ] = useState([])
+  const [requestNameRuns, setRequestNameRuns ] = useState({
+    requestNameRuns : []
+  })
 
   const [altConcentrationRuns, setAltConcentrationRuns ] = useState({
     altConcentrationRuns : []
@@ -141,7 +145,7 @@ function HomePage() {
   
 
   
-function handleRuns() {
+  async function handleRuns() {
     getRuns().then((result) => {
      
       result.rows.map(row => {
@@ -168,14 +172,14 @@ function handleRuns() {
           var A = Object.keys(a)[0];
           var B = Object.keys(b)[0];
           if(direction == "ascending") {
-            return a[A][property] < b[B][property] ? -1 : 1
-         } else if(direction == "descending") {
-            return a[A][property] < b[B][property] ? 1 : -1
-         }
+                return (a[A][property] - b[B][property]);
+              } else if(direction == "descending") {
+                return b[B][property] - a[A][property];
+              }
           });
         } 
         setAltConcentrationRuns(sortRowsByProperty('altConcentration', 'ascending'));
-        //not updating, only showing runs 
+        //not updating 
 
       
       setIsLoading(false);
