@@ -7,8 +7,8 @@ const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength, poolSameLibrary,poolSameProject  } = require('./PoolFunctions');
 var fs = require('fs')
-const Project = require('../ classes/Project');
-const Sample = require('../ classes/Sample');
+const Project = require('../components/Project');
+const { Sample } = require('../components/Sample');
 
 const columns = [
   { columnHeader: 'Pool', data: 'pool', editor: false },
@@ -75,28 +75,27 @@ exports.getRuns = [
         // poolSameRunLength(grid);
         // console.log(poolSameRunLength(grid));
         for(let sample of grid) {
-          sampleChild = new Sample(sample.sampleId, sample.wellPos, sample.barcodeSeq, sample.tumor, sample.readNum)
+          sampleChild = new Sample(sample.sampleId, sample.altConcentration, sample.wellPos, sample.barcodeSeq, sample.tumor, sample.runType, sample.readsRequested)
           lanes.push(sampleChild)
         }
 
+        // const runLengthJson = JSON.stringify(poolSameRunLength(grid));
+        // fs.writeFile("sameRunLengthsMap.json", runLengthJson, function(err) {
+        //   if (err) throw err;
+        //   console.log('complete run lengths');
+        //   });
 
-        const runLengthJson = JSON.stringify(poolSameRunLength(grid));
-        fs.writeFile("sameRunLengthsMap.json", runLengthJson, function(err) {
-          if (err) throw err;
-          console.log('complete run lengths');
-          });
+        //   const libraryJson = JSON.stringify(poolSameLibrary(grid));
+        // fs.writeFile("libraries.json", libraryJson, function(err) {
+        //   if (err) throw err;
+        //   console.log('complete library');
+        //   });
 
-          const libraryJson = JSON.stringify(poolSameLibrary(grid));
-        fs.writeFile("libraries.json", libraryJson, function(err) {
-          if (err) throw err;
-          console.log('complete library');
-          });
-
-          const projectJson = JSON.stringify(poolSameProject(grid));
-        fs.writeFile("projects.json", projectJson, function(err) {
-          if (err) throw err;
-          console.log('complete projects');
-          });
+        //   const projectJson = JSON.stringify(poolSameProject(grid));
+        // fs.writeFile("projects.json", projectJson, function(err) {
+        //   if (err) throw err;
+        //   console.log('complete projects');
+        //   });
 
         return apiResponse.successResponseWithData(res, 'success', {
           rows: grid,

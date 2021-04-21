@@ -22,9 +22,6 @@ class Project {
     }
 }
 
-module.exports = class Project {
-    constructor(arg) {
-        console.log(arg);
-    }
+module.exports = {
+    Project
 }
-

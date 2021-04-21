@@ -33,9 +33,9 @@ function App() {
       <Router>
         <Header />
         <Switch>
-        <Route exact path='/planRuns' component={Runs} />
+        
           <Route exact path='/' component={Table} />
-          
+          <Route exact path='/planRuns' component={Runs} />  
         </Switch>
       </Router>
     </MuiThemeProvider>

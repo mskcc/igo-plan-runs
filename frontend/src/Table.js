@@ -5,7 +5,7 @@ import { makeStyles, TextField, Button } from '@material-ui/core';
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.css';
 import LoadingOverlay from 'react-loading-overlay';
-
+import ReactDOM from 'react-dom';
 
 
 
@@ -27,12 +27,92 @@ function HomePage() {
 
   const classes = useStyles();
   const hotTableComponent = React.createRef();
-  const [runs, setRuns] = useState({
-    runs: [],
-  });
+
+  // let ascendingNode = ReactDOM.findDOMNode(<HotTable />).getElementsByClassName('ascending');
+  // let descendingNode = ReactDOM.findDOMNode(<HotTable />).getElementsByClassName('descending');
+  
+  
+
+  
+  const [runs, setRuns] = useState([]);
   const [filteredRuns, setFilteredRuns] = useState({
     filteredRuns: [],
   });
+
+  const [pooledRuns, setPooledRuns] = useState({
+    pooledRuns : []
+  })
+
+  const [sampleIdRuns, setSampleIdRuns] = useState({
+    sampleIdRuns : []
+  })
+  
+  const [ otherSampleIdRuns, setOtherSampleIdRuns ] = useState({
+    otherSampleIdRuns : []
+  })
+
+  const [recipe, setRecipeRuns] = useState({
+    recipeRuns : []
+  })
+
+  const [tumor, setTumorRuns ] = useState({
+    tumorRuns : []
+  })
+
+  const [poolConcentrationRuns, setPoolConcentrationRuns] = useState({
+    poolConcentrationRuns : []
+  })
+
+  const [requestIdRuns, setRequestIdRuns ] = useState({
+     requestIdRuns : []
+  })
+
+  const [requestNameRuns, setRequestNameRuns ] = useState([])
+
+  const [altConcentrationRuns, setAltConcentrationRuns ] = useState({
+    altConcentrationRuns : []
+  })
+
+  const [concentrationUnitsRuns, setConcentrationUnitsRuns] = useState({
+    concentrationUnitsRuns : []
+  })
+
+  const [volumeRuns, setVolumeRuns] = useState({
+    volumeRuns : []
+  })
+
+  const [plateIdRuns, setPlateIdRuns] = useState({
+    plateIdRuns : []
+  })
+
+
+  const [wellPosRuns, setWellPosRuns] = useState({
+    wellPosRuns : []
+  })
+
+  const [barcodeSeqRuns, setBarcodeSeqRuns] = useState({
+    barcodeSeqRuns : []
+  })
+
+  const [barcodeIdRuns, setBarcodeIdRuns] = useState({
+    barcodeSeqRuns : []
+  })
+
+  const [runTypeRuns, setRunTypeRuns] = useState({
+    runTypeRuns : []
+  })
+
+  const [readsRequestedRuns, setReadsRequestedRuns] = useState({
+    readsRequestedRuns : []
+  })
+
+  const [readsRemainingRuns, setReadsRemainingRuns ] = useState({
+    readsRequestedRuns : []
+  })
+
+  const [readsAchievedRuns, setReadsAchievedRuns] = useState({
+    readsAchievedRuns : []
+  })
   const [columns, setColumns] = useState({
     columns: [],
   });
@@ -58,10 +138,10 @@ function HomePage() {
     }
   };
 
-  const handleExport = () => {
-    exportExcel(filteredRuns, columns);
-  };
-  async function handleRuns() {
+  
+
+  
+function handleRuns() {
     getRuns().then((result) => {
      
       result.rows.map(row => {
@@ -78,17 +158,69 @@ function HomePage() {
       const checkboxColumn = {columnHeader: "Exclude From Planning", data:checkboxData, type: "checkbox"};
       setRuns(result.rows);
       setFilteredRuns(result.rows);
+      
       setColumns(prev => [checkboxColumn, ...result.columns]);
+
+      //function to sort data according to column header/property
+      
+      const sortRowsByProperty = (property, direction) => {
+        return result.rows.sort(function(a,b) { 
+          var A = Object.keys(a)[0];
+          var B = Object.keys(b)[0];
+          if(direction == "ascending") {
+            return a[A][property] < b[B][property] ? -1 : 1
+         } else if(direction == "descending") {
+            return a[A][property] < b[B][property] ? 1 : -1
+         }
+          });
+        } 
+        setAltConcentrationRuns(sortRowsByProperty('altConcentration', 'ascending'));
+        //not updating, only showing runs 
+
       
       setIsLoading(false);
+      
+      
     });
   }
 
   useEffect(() => {
     setIsLoading(true);
     handleRuns();
+    
   }, []);
- 
+  console.log('runs', altConcentrationRuns);
+  
+  
+
+
+
+const handleExport = () => {
+  
+exportExcel(filteredRuns, columns);
+};
+
+
+// setPooledRuns(sortRowsByProperty('pool', "ascending"));
+//       setSampleIdRuns(sortRowsByProperty('sampleId', "ascending"));
+//       setOtherSampleIdRuns(sortRowsByProperty('otherSampleId', "ascending"));
+//       setRecipeRuns(sortRowsByProperty('recipe', "ascending"));
+//       setTumorRuns(sortRowsByProperty('tumor', "ascending"));
+//       setPoolConcentrationRuns(sortRowsByProperty('concentration', "ascending"));
+//       setRequestIdRuns(sortRowsByProperty('requestId', "ascending"));
+//       setRequestNameRuns(sortRowsByProperty('requestName', "ascending"));
+//       setAltConcentrationRuns(sortRowsByProperty('altConcentration', "ascending"));
+//       setConcentrationUnitsRuns(sortRowsByProperty('concentrationUnits', "ascending"));
+//       setVolumeRuns(sortRowsByProperty('volume', "ascending"));
+//       setPlateIdRuns(sortRowsByProperty('plateId', "ascending"));
+//       setWellPosRuns(sortRowsByProperty('wellPos', "ascending"));
+//       setBarcodeSeqRuns(sortRowsByProperty('barcodeSeq', "ascending"));
+//       setBarcodeIdRuns(sortRowsByProperty('barcodeId', "ascending"));
+//       setRunTypeRuns(sortRowsByProperty('runType', "ascending"));
+//       setReadsRequestedRuns(sortRowsByProperty('readNum', "ascending"));
+//       setReadsRemainingRuns(sortRowsByProperty('remainingReads', "ascending"));
+//       setReadsAchievedRuns(sortRowsByProperty('readTotal', "ascending"));
+
   return (
     <div className={classes.container}>
       <LoadingOverlay active={isLoading} spinner text='Loading...'>

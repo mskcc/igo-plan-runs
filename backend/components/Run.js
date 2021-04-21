@@ -10,7 +10,7 @@ class Run {
     }
 
     addLane() {
-        if (this.totalLanes - this.numLanes[type] > 0) {
+        if ( this.numLanes[type]  -this.totalLanes > 0) {
             this.lanes.push(lane);
             this.totalLanes += 1;
         } 
@@ -19,8 +19,6 @@ class Run {
 
  }
 
- module.exports = class Project {
-    constructor(arg) {
-        console.log(arg);
-    }
-}
+ module.exports = {
+     Run
+ }
