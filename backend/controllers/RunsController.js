@@ -7,7 +7,7 @@ const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength, poolSameLibrary,poolSameProject  } = require('./PoolFunctions');
 var fs = require('fs')
-const Project = require('../components/Project');
+const { Project } = require('../components/Project');
 const { Sample } = require('../components/Sample');
 
 const columns = [
@@ -72,13 +72,14 @@ exports.getRuns = [
     getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
-        // poolSameRunLength(grid);
+        
+        console.log(poolSameProject(grid));
         // console.log(poolSameRunLength(grid));
-        for(let sample of grid) {
-          sampleChild = new Sample(sample.sampleId, sample.altConcentration, sample.wellPos, sample.barcodeSeq, sample.tumor, sample.runType, sample.readsRequested)
-          lanes.push(sampleChild)
-        }
-
+        // for(let sample of grid) {
+        //   sampleChild = new Sample(sample.sampleId, sample.altConcentration, sample.wellPos, sample.barcodeSeq, sample.tumor, sample.runType, sample.readsRequested)
+        //   lanes.push(sampleChild)
+        // }
+          // console.log(grid);
         // const runLengthJson = JSON.stringify(poolSameRunLength(grid));
         // fs.writeFile("sameRunLengthsMap.json", runLengthJson, function(err) {
         //   if (err) throw err;
@@ -96,6 +97,8 @@ exports.getRuns = [
         //   if (err) throw err;
         //   console.log('complete projects');
         //   });
+        
+
 
         return apiResponse.successResponseWithData(res, 'success', {
           rows: grid,

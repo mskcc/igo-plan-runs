@@ -1,12 +1,14 @@
 
 class Run {
-    constructor(id=0, totalLanes= 0, lanes = [], type, runLength) {
+    constructor(id=0, totalLanes= 0, lanes = [], type, runLength, projects =[]) {
         this.id = id++; //unique id 
         this.totalLanes = totalLanes; //current number of lanes
         this.numLanes = {"SP": 2, "S1": 2, "S2": 2, "S4": 4}
         this.lanes = lanes; // array of lanes
         this.type = type; // whether SP, S1, S2, or S4
         this.runLength = runLength; // read length
+        this.projects = projects
+        this.isValid = false;
     }
 
     addLane() {
@@ -28,7 +30,7 @@ class Run {
             }
         }
     }
-
+    
  }
 
  module.exports = {

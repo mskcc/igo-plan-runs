@@ -34,3 +34,27 @@ const optimizeRuns = (samples) => {
 const optimizeLanes = (samples) => {
 
 }
+
+const optimizeRemaining = (samples) => {
+
+}
+
+const flowcells = {'SP': 1, 'S1': 2, 'S2': 3, 'S4': 4}
+
+// def combinationSum(samples, readCapacity):
+//     res = []
+    
+//     def backtrack(rem, sub, start):
+//         if rem == 0:
+//             res.append(list(sub))
+//             return
+//         elif rem < 0:
+//             return 
+//         for i in range(start, len(candidates)):
+//             sub.append(candidates[i])
+//             backtrack(rem- candidates[i], sub, i)
+//             sub.pop()
+        
+        
+//     backtrack(target, [], 0)
+//     return res

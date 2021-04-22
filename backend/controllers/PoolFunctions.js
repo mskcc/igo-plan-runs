@@ -1,6 +1,9 @@
 // #2 requirement, pooling together samples of same read length
 // return map with keys equal to read length, and values are arrays of samples with matching read length
 
+const { Project } = require("../components/Project");
+const { Sample } = require("../components/Sample");
+
 // numbers in Mils
 const flowcells = {"SP": [[350,400], [700,800]], "S1": [[800,900], [1600,1800]], "S2": [[1800,1900], [3600,3800]], "S4": [[2400,2600], [9000,10000]]}
 
@@ -46,21 +49,61 @@ function poolSameLibrary(samples) {
   function poolSameProject(samples) {
     let map = {}
     let projects = []
+    let projectObjects = [];
     for (let sample of samples) {
-      projects.push(sample.requestId);
+      projects.push(sample.requestId)
     }
     let projectsSet = new Set(projects);
-    projectsSet.forEach(run => {
-      map[run] = []
+    projectsSet.forEach(project => {
+      map[project] = [] //key is requestId, value is array of 
     })
     for (let sample of samples) {
       map[sample.requestId].push(sample);
     }
-    return map;
+    
+    for(let sample of Object.values(map)) {
+      console.log(sample);
+      let obj = new Project(sample[0].requestId, sample[0].runType, [], sample[0].recipe,
+        sample[0].requestName);
+        projectObjects.push(obj);
+    }
+    for (let sample of samples) {
+      for(let obj of projectObjects) {
+        if (sample.requestId == obj.requestId) {
+          obj.samples.push(new Sample(sample.sampleId, sample.barcodeSeq, sample.recipe, sample.runLength,
+            sample.readsRequested, sample.requestName, sample.requestId, sample.altConcentration, sample.concentrationUnits));
+        
+        }
+      }
+    }
+    return projectObjects;
   }
 
+  function optimizeUserLibraries(projects) {
+    let readCount = 0
+    for(let project of projects) {
+      project.isUserLibrary();
+      if(project.isUserLibrary) {
+          for(let sample of project.samples) {
+            readCount += sample.readsRequested;
+          }
+      if(readCount < 400) {
 
+      }
+      else if(readCount < 800) {
 
+      }
+      else if (readCount < 1800) {
+
+      } else if (readCount < 3800) {
+
+      } else {
+        
+      }
+    }
+
+    }
+  }
 
   module.exports = {
   poolSameRunLength,

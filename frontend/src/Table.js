@@ -53,7 +53,7 @@ function HomePage() {
     otherSampleIdRuns : []
   })
 
-  const [recipe, setRecipeRuns] = useState({
+  const [recipeRuns, setRecipeRuns] = useState({
     recipeRuns : []
   })
 
