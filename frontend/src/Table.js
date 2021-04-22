@@ -73,9 +73,7 @@ function HomePage() {
     requestNameRuns : []
   })
 
-  const [altConcentrationRuns, setAltConcentrationRuns ] = useState({
-    altConcentrationRuns : []
-  })
+  const [altConcentrationRuns, setAltConcentrationRuns ] = useState([])
 
   const [concentrationUnitsRuns, setConcentrationUnitsRuns] = useState({
     concentrationUnitsRuns : []
@@ -168,19 +166,21 @@ function HomePage() {
       //function to sort data according to column header/property
       
       const sortRowsByProperty = (property, direction) => {
-        return result.rows.sort(function(a,b) { 
+        const arr = [...result.rows].sort(function(a,b) { 
           var A = Object.keys(a)[0];
           var B = Object.keys(b)[0];
-          if(direction == "ascending") {
-                return (a[A][property] - b[B][property]);
-              } else if(direction == "descending") {
-                return b[B][property] - a[A][property];
-              }
+          if (direction === "ascending") {
+            return a[A][property] < b[B][property] ? -1 : 1
+         } else if (direction === "descending") {
+            return a[A][property] < b[B][property] ? 1 : -1
+         }
           });
+          setAltConcentrationRuns(arr);
         } 
-        setAltConcentrationRuns(sortRowsByProperty('altConcentration', 'ascending'));
+        // setAltConcentrationRuns(sortRowsByProperty('altConcentration', 'ascending'));
         //not updating 
 
+        sortRowsByProperty("altConcentration", "ascending");
       
       setIsLoading(false);
       

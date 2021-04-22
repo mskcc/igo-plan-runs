@@ -2,22 +2,24 @@
 
 
 class Sample {
-    constructor(sampleId, sampleConcentration, wellPos, barcodeSeq, tumor, runLength, readsRequested) {
+    constructor(sampleId, sampleConcentration, wellPos, barcodeSeq, tumor, runLength, requestName, readsRequested) {
         this.sampleId = sampleId;
         this.sampleConcentration = sampleConcentration;
         this.wellPos = wellPos; 
         this.barcodeSeq = barcodeSeq;
         this.tumor = tumor;
-        this.runLength = runLength;
+        this.runLength = runLength; // read length
         this.readsRequested = readsRequested;
+        this.library = library; //requestName
+        this.project = project // requestId
     }
    
-    poolByReadLength(lane) { //
-        for(let sample of lane.samples) {
-            if (sample.runLength == this.runLength) {
-                lane.addSample(this);
-            } else {
-                continue;
+    poolByReadLength(run) { //
+        if(this.runLength == run.runLength){
+            for(let lane of run.lanes) {
+                if (!lane.filled && this.library == lane.library) {
+                    lane.addSample(this);
+                }
             }
         }
     }
