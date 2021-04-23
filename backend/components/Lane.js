@@ -32,7 +32,7 @@ class Lane {
         if (!barcodes.includes(sample.barcodeSeq)) {
             this.addSample(sample);
         }
-    }
+    } // check lenght of barcode - minimm 6 letters and check whether first 6 are same
 }
 
 
