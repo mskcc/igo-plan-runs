@@ -13,11 +13,12 @@ class Project {
 
     
     isUserLibrary(){
-        if(this.requestId.includes("Investigator")) {
+        if(this.requestName.includes("Investigator")) {
             this.userLibrary = true;   
         }
     }
     canBeSplit(){
+        //only whole exome can be split
         if(this.recipe.includes("IDT_Exome")) {
             this.wes = true;
         }

@@ -9,6 +9,7 @@ class Run {
         this.runLength = runLength; // read length
         this.projects = projects
         this.isValid = false;
+        this.readCapacity = {'SP':[700,800], 'S1': [1600, 1800], 'S2': [3600, 3800], 'S4': [9000, 10000]}
     }
 
     addLane() {
@@ -30,7 +31,7 @@ class Run {
             }
         }
     }
-    
+
  }
 
  module.exports = {

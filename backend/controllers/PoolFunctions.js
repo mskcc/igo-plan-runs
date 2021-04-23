@@ -2,6 +2,7 @@
 // return map with keys equal to read length, and values are arrays of samples with matching read length
 
 const { Project } = require("../components/Project");
+const { Run } = require("../components/Run");
 const { Sample } = require("../components/Sample");
 
 // numbers in Mils
@@ -81,28 +82,46 @@ function poolSameLibrary(samples) {
 
   function optimizeUserLibraries(projects) {
     let readCount = 0
+    let res = []
     for(let project of projects) {
       project.isUserLibrary();
-      if(project.isUserLibrary) {
+      let runLength = project.runLength;
+      if(project.userLibrary) {
           for(let sample of project.samples) {
             readCount += sample.readsRequested;
           }
       if(readCount < 400) {
-
-      }
-      else if(readCount < 800) {
-
-      }
-      else if (readCount < 1800) {
-
-      } else if (readCount < 3800) {
-
-      } else {
         
       }
+      else if(readCount < 800) {
+        let run = new Run(2,'SP', runLength);
+        run.totalReads += readCount;
+        run.projects.push(project);
+        res.push(run)
+        
+      }
+      else if (readCount < 1800) {
+        let run = new Run(2, 'S1', runLength);
+        run.totalReads += readCount;
+        run.projects.push(project);
+        res.push(run)
+        
+      } else if (readCount < 3800) {
+        let run = new Run(2, 'S2', runLength);
+        run.totalReads += readCount;
+        run.projects.push(project);
+        res.push(run);
+        
+      } else {
+        let run = new Run(4, 'S4', runLength);
+        run.totalReads += readCount;
+        run.projects.push(project);
+        res.push(run);
+      }
     }
 
     }
+    return res;
   }
 
   module.exports = {
