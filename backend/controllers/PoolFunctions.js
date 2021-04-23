@@ -4,7 +4,7 @@
 const { Project } = require("../components/Project");
 const { Run } = require("../components/Run");
 const { Sample } = require("../components/Sample");
-
+const { Lane }  = require('../components/Lane');
 // numbers in Mils
 const flowcells = {"SP": [[350,400], [700,800]], "S1": [[800,900], [1600,1800]], "S2": [[1800,1900], [3600,3800]], "S4": [[2400,2600], [9000,10000]]}
 
@@ -90,30 +90,28 @@ function poolSameLibrary(samples) {
           for(let sample of project.samples) {
             readCount += sample.readsRequested;
           }
-      if(readCount < 400) {
-        
-      }
-      else if(readCount < 800) {
-        let run = new Run(2,'SP', runLength);
+
+      if(readCount < 800) {
+        let run = new Run(null, 0,'SP', runLength);
         run.totalReads += readCount;
         run.projects.push(project);
         res.push(run)
         
       }
       else if (readCount < 1800) {
-        let run = new Run(2, 'S1', runLength);
+        let run = new Run(null, 0, 'S1', runLength);
         run.totalReads += readCount;
         run.projects.push(project);
         res.push(run)
         
       } else if (readCount < 3800) {
-        let run = new Run(2, 'S2', runLength);
+        let run = new Run(null, 0, 'S2', runLength);
         run.totalReads += readCount;
         run.projects.push(project);
         res.push(run);
         
       } else {
-        let run = new Run(4, 'S4', runLength);
+        let run = new Run(null, 0, 'S4', runLength);
         run.totalReads += readCount;
         run.projects.push(project);
         res.push(run);
@@ -124,10 +122,43 @@ function poolSameLibrary(samples) {
     return res;
   }
 
+
+  function planRuns(samples) { //takes in array of samples 
+    const rangeLanes = {"SP": [350, 400], "S1": [800,900], "S2": [1800, 1900], "S4": [2400, 2600]};
+    const result = {"Runs": [], "Lanes": [], "Remaining": []} //runs array - array of run objects, lanes array of lane objects, remaining array- array of samples
+   let totalReads = 0
+    for(let sample of samples) {
+      let ranges = Object.values(rangeLanes)
+      totalReads += sample.readsRequested;
+      // case where samples don't fit on a lane of any flow cell, so leftover
+      if (totalReads < ranges[0][0] || (totalReads > ranges[0][1] && totalReads < ranges[1][0]) || (totalReads > ranges[1][1] && totalReads < ranges[2][0]) ||  
+      ( totalReads > ranges[2][1] && totalReads < ranges[3][0]) || (totalReads > ranges[3][1])){
+          result["Remaining"].push(sample);
+      }
+    }
+return result;
+  }
+
+  var sampleCombinations = function(samples) {
+    let result = [];
+    dfs([], 0);
+    
+    function dfs(current, index){
+        result.push(current);
+        for(let i = index; i < nums.length; i++) {
+            dfs(current.concat(nums[i]), i + 1);
+        }
+    }
+    
+    return result;
+};
+
   module.exports = {
   poolSameRunLength,
   poolSameLibrary,
-  poolSameProject
+  poolSameProject,
+  optimizeUserLibraries,
+  planRuns
 }
 
 
