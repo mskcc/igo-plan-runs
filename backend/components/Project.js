@@ -5,12 +5,19 @@ class Project {
         this.requestId = requestId; 
         this.runLength = runLength; // one project same runlength
         this.samples = samples;
+        this.totalReads = 0;
         this.recipe = recipe; // correlates with project, same project = same recipe
         this.requestName = requestName;
         this.userLibrary = false;
         this.wes = false;
     }
 
+    addSampleReads() {
+        for(let sample of this.samples) {
+            this.totalReads += parseInt(sample.readsRequested);
+        }
+        
+    }
     
     isUserLibrary(){
         if(this.requestName.includes("Investigator")) {

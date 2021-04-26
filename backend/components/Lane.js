@@ -27,8 +27,10 @@ class Lane {
     noIndexCollision(sample){ // if lane does not include barcode seqs that are the same, push sample to lane
         let barcodes = []
         for (let s1 of this.samples) {
-            barcodes.push(s1.barcodeSeq);
+            barcodes.push(s1.barcodeSeq.slice(0, 7));
         }
+        let barcodeFragment = sample.barcodeSeq.slice(0,7);
+
         if (!barcodes.includes(sample.barcodeSeq)) {
             this.addSample(sample);
         }

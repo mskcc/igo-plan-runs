@@ -61,9 +61,8 @@ function poolSameLibrary(samples) {
     for (let sample of samples) {
       map[sample.requestId].push(sample);
     }
-    
+    console.log("map", map)
     for(let sample of Object.values(map)) {
-      console.log(sample);
       let obj = new Project(sample[0].requestId, sample[0].runType, [], sample[0].recipe,
         sample[0].requestName);
         projectObjects.push(obj);
@@ -72,10 +71,14 @@ function poolSameLibrary(samples) {
       for(let obj of projectObjects) {
         if (sample.requestId == obj.requestId) {
           obj.samples.push(new Sample(sample.sampleId, sample.barcodeSeq, sample.recipe, sample.runLength,
-            sample.readsRequested, sample.requestName, sample.requestId, sample.altConcentration, sample.concentrationUnits));
+            sample.readNum, sample.requestName, sample.requestId, sample.altConcentration, sample.concentrationUnits));
         
         }
       }
+    }
+
+    for(let project of projectObjects) {
+      project.addSampleReads();
     }
     return projectObjects;
   }
