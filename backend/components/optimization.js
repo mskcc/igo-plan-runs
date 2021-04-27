@@ -97,7 +97,7 @@ function optimizeUserLibraries(projects) {
     
     return result;
 };
-  console.log(sampleCombinations(arr));
+  console.log("combinations", sampleCombinations(arr));
   
 
   function planRuns(samples) { //takes in array of samples 
@@ -108,7 +108,7 @@ function optimizeUserLibraries(projects) {
     const result = {"Runs": [], "Lanes": [], "Remaining": []} //runs array - array of run objects, lanes array of lane objects, remaining array- array of samples
     let ranges = Object.values(rangeLanes)
     let ranges2 = Object.values(rangeRuns);
-    let arr = samples;
+    let res = samples;
     for(let sample of sampleCombinations(samples)) {
         let totalReads = 0;
         for(let element of sample) {
@@ -151,11 +151,13 @@ function optimizeUserLibraries(projects) {
         console.log('arr', arr);
         if (totalReads < ranges[0][0] || (totalReads > ranges[0][1] && totalReads < ranges[1][0]) || (totalReads > ranges[1][1] && totalReads < ranges[2][0]) ||  
         (totalReads > ranges[2][1] && totalReads < ranges[3][0]) || (totalReads > ranges[3][1])){
-        for(let el of arr) {
-          if(!result["Remaining"].includes(el)) {
-            result["Remaining"].push(el);  
+        for(let e of arr) {
+          console.log("element", e);
+          if(!result["Remaining"].includes(e)) {
+            result["Remaining"].push(e);  
           } 
         }
+        console.log("remaining", result["Remaining"]);
       }
     }
     
@@ -164,8 +166,49 @@ function optimizeUserLibraries(projects) {
 return result;
   }
 
-console.log("result", planRuns(arr));
+// console.log("result", planRuns(arr));
 
+function binPacking(arr) {
+  let capacities = [800, 1800, 3800, 10000];
+  let runs = ['SP', 'S1', 'S2', 'S4'];
+  let totalReads = arr.reduce((acc, ele) => {
+    acc + ele;
+  }, 0);
+  function findWeight(totalReads) {
+    let weight = 0;
+    let run = ''
+    for(let i = 0; i< capacities.length; i++) {
+      if (totalReads <= capacities[i]) {
+        weight = capacities[i]
+        run = runs[i]
+      }
+    }
+    return [weight, run];
+  }
+  let weight = findWeight(totalReads)[0];
+  let run = findWeight(totalReads)[1];
+  let samples = arr;
+  samples.sort((a,b) => b-a);
+  let i = 0;
+  let res =[];
+
+  while(samples.length > 0) {
+    if(weight > 0 && i < samples.length) {
+      weight -= samples[i];
+      samples.splice(i, 1);
+    } else if(weight == 0) {
+      res.push(run)
+      remReads = samples.reduce((acc, ele) => {
+        acc + ele;
+      }, 0);
+      weight = findWeight(remReads)[0];
+      run = find
+    } else {
+        i += 1;
+    }
+  }
+
+}
 
 
 module.exports = {

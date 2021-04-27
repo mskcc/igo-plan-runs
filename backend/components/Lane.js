@@ -10,7 +10,7 @@ class Lane {
         this.project = project // requestId, each lane has to have same requestName
         this.readCapacity = {"SP": [350, 400], "S1": [800,900], "S2": [1800, 1900], "S4": [2400, 2600]}; // ranges for each type of flowcell
         this.filled = false; //whether total number of reads has reached minimum capacity
-        
+        this.capacity = this.readCapacity[this.type];
     }
     
     addSample (sample) {
