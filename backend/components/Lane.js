@@ -31,7 +31,7 @@ class Lane {
         }
         let barcodeFragment = sample.barcodeSeq.slice(0,7);
 
-        if (!barcodes.includes(sample.barcodeSeq)) {
+        if (!barcodes.includes(barcodeFragment)) {
             this.addSample(sample);
         }
     } // check lenght of barcode - minimm 6 letters and check whether first 6 are same

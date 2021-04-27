@@ -9,18 +9,18 @@ const { Lane }  = require('../components/Lane');
 const flowcells = {"SP": [[350,400], [700,800]], "S1": [[800,900], [1600,1800]], "S2": [[1800,1900], [3600,3800]], "S4": [[2400,2600], [9000,10000]]}
 
 
-function poolSameRunLength(samples) {
+function poolSameRunLength(projects) {
     let map = {}
     let runLengths = []
-    for (let sample of samples) {
-      runLengths.push(sample.runType);
+    for (let project of projects) {
+      runLengths.push(project.runLength);
     }
     let runLengthSet = new Set(runLengths);
-    runLengthSet.forEach(run => {
-      map[run] = []
+    runLengthSet.forEach(runLength => {
+      map[runLength] = []
     })
-    for (let sample of samples) {
-      map[sample.runType].push(sample);
+    for (let project of projects) {
+      map[project.runLength].push(project);
     }
     return map;
   }
@@ -125,43 +125,15 @@ function poolSameLibrary(samples) {
     return res;
   }
 
+  
 
-  function planRuns(samples) { //takes in array of samples 
-    const rangeLanes = {"SP": [350, 400], "S1": [800,900], "S2": [1800, 1900], "S4": [2400, 2600]};
-    const result = {"Runs": [], "Lanes": [], "Remaining": []} //runs array - array of run objects, lanes array of lane objects, remaining array- array of samples
-   let totalReads = 0
-    for(let sample of samples) {
-      let ranges = Object.values(rangeLanes)
-      totalReads += sample.readsRequested;
-      // case where samples don't fit on a lane of any flow cell, so leftover
-      if (totalReads < ranges[0][0] || (totalReads > ranges[0][1] && totalReads < ranges[1][0]) || (totalReads > ranges[1][1] && totalReads < ranges[2][0]) ||  
-      ( totalReads > ranges[2][1] && totalReads < ranges[3][0]) || (totalReads > ranges[3][1])){
-          result["Remaining"].push(sample);
-      }
-    }
-return result;
-  }
 
-  var sampleCombinations = function(samples) {
-    let result = [];
-    dfs([], 0);
-    
-    function dfs(current, index){
-        result.push(current);
-        for(let i = index; i < nums.length; i++) {
-            dfs(current.concat(nums[i]), i + 1);
-        }
-    }
-    
-    return result;
-};
 
   module.exports = {
   poolSameRunLength,
   poolSameLibrary,
   poolSameProject,
   optimizeUserLibraries,
-  planRuns
 }
 
 

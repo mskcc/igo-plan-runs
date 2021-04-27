@@ -12,6 +12,8 @@ class Sample {
         this.project = project // requestId
         this.sampleConcentration = sampleConcentration;
         this.concentrationUnit = concentrationUnit;
+        this.wes = false;
+        this.userLibrary = false;
     }
     
     poolByReadLength(run) { //
@@ -24,7 +26,18 @@ class Sample {
         }
     }
 
-
+    isUserLibrary(){
+        if(this.library.includes("Investigator")) {
+            this.userLibrary = true;   
+        }
+    }
+    canBeSplit(){
+        //only whole exome can be split
+        if(this.recipe.includes("IDT_Exome")) {
+            this.wes = true;
+        }
+        
+    }
 }
 
 

@@ -20,13 +20,16 @@ const { planRuns } = require('../components/optimization');
 
 
 describe('result of plan Runs function', () => {
-    let sample1 = new Sample('09838_10_1_1_1_1', 'ACGACATC', 'ShallowWGS', 'PE100', 120, 'sWGS', 
+    let sample1 = new Sample('09838_10_1_1_1_1', 'ACGACATC', 'ShallowWGS','PE100', 120, 'sWGS', 
   '09838', 82.9, 'nM');
   let sample2 = new Sample('09838_11_1_1_1_1', 'ACGACATC', 'ShallowWGS', 'PE100', 300, 'sWGS', 
   '09838', 82.9, 'nM');
-  let sample3 = new Sample('09838_9_1_1_1_1', 'ACGACATC', 'ShallowWGS', 'PE100', 500, 'sWGS', 
+  let sample3 = new Sample('09838_9_1_1_1_1', 'ACGACATC', 'ShallowWGS','PE100', 500, 'sWGS', 
   '09838', 82.9, 'nM');
-  let arr = [sample1, sample2, sample3]
+  let sample4 = new Sample('09259_H_101_2', 'CAGTTAAT','IDT_Exome_v1_FP_Viral_Probes', 'PE100',160, 'DNAExtraction', '09259_H', 16.20, 'NM');
+  let sample5 = new Sample('09259_H_101_3', 'CAGTTAAT','IDT_Exome_v1_FP_Viral_Probes', 'PE100',160, 'DNAExtraction', '09259_H', 16.20, 'NM');
+  
+  
     it('should return object with leftover array of sample 1', () => {
         expect(planRuns([sample1])).to.be.an('object');
         expect(planRuns([sample1])).to.eql({"Runs": [], "Lanes": [], "Remaining": [sample1]})
@@ -37,14 +40,14 @@ describe('result of plan Runs function', () => {
     })
     // needs test case that returns sample 2 and sample3 in lane of S1 or run of SP. find all combinations of samples
     it('should return object with sp run filled', () => {
-        expect(planRuns(arr)).to.be.an('object');
-        expect(planRuns(arr)["Runs"]).to.eql([ { 'SP': [ sample2, sample3] } ])
+        expect(planRuns([sample1, sample2, sample3])).to.be.an('object');
+        expect(planRuns([sample1, sample2, sample3])["Runs"]).to.eql([ { 'SP': [ sample2, sample3] } ])
     
     })
 
     it('should return object with sample 1 in remaining object', () => {
-        expect(planRuns(arr)).to.be.an('object');
-        expect(planRuns(arr)["Remaining"]).to.eql([sample1])
+        expect(planRuns([sample1, sample2, sample3])).to.be.an('object');
+        expect(planRuns([sample1, sample2, sample3])["Remaining"]).to.eql([sample1])
     
     })
 

@@ -73,31 +73,22 @@ exports.getRuns = [
       .then((result) => {
         let grid = generateGrid(result.data);
         
-        console.log(poolSameProject(grid));
-        // console.log(poolSameRunLength(grid));
-        // for(let sample of grid) {
-        //   sampleChild = new Sample(sample.sampleId, sample.altConcentration, sample.wellPos, sample.barcodeSeq, sample.tumor, sample.runType, sample.readsRequested)
-        //   lanes.push(sampleChild)
-        // }
-          // console.log(grid);
-        // const runLengthJson = JSON.stringify(poolSameRunLength(grid));
-        // fs.writeFile("sameRunLengthsMap.json", runLengthJson, function(err) {
-        //   if (err) throw err;
-        //   console.log('complete run lengths');
-        //   });
-
-        //   const libraryJson = JSON.stringify(poolSameLibrary(grid));
-        // fs.writeFile("libraries.json", libraryJson, function(err) {
-        //   if (err) throw err;
-        //   console.log('complete library');
-        //   });
-
-        //   const projectJson = JSON.stringify(poolSameProject(grid));
-        // fs.writeFile("projects.json", projectJson, function(err) {
-        //   if (err) throw err;
-        //   console.log('complete projects');
-        //   });
+        // console.log(poolSameProject(grid));
+        console.log(poolSameRunLength(poolSameProject(grid)));
+        function groupReadsByRunLength() {
+          let runLengths = poolSameRunLength(poolSameProject(grid));
+          let map = {}
+          for(let [runLength, projects] of Object.entries(runLengths)) {
+            let totalReadsByRunLength = 0;
+            for(let project of projects) {
+              totalReadsByRunLength += project.totalReads;
+            }
+            map[runLength] = totalReadsByRunLength;
+          }
+          return map;
+        }
         
+        console.log(groupReadsByRunLength());
 
 
         return apiResponse.successResponseWithData(res, 'success', {

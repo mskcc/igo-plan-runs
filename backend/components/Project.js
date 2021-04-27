@@ -5,29 +5,43 @@ class Project {
         this.requestId = requestId; 
         this.runLength = runLength; // one project same runlength
         this.samples = samples;
-        this.totalReads = 0;
         this.recipe = recipe; // correlates with project, same project = same recipe
         this.requestName = requestName;
-        this.userLibrary = false;
-        this.wes = false;
+        this.totalReads = 0
+    }
+
+    addSample(sample) {
+        this.samples.push(sample);
     }
 
     addSampleReads() {
-        for(let sample of this.samples) {
-            this.totalReads += parseInt(sample.readsRequested);
+        for (let sample of this.samples) {
+            this.totalReads += parseInt(sample.readsRequested)
         }
+    }
+
+    getProjectReads() { // adds up all reads requested for all samples in project instance
+        let reads = 0;
+        for(let sample of this.samples) {
+            this.reads += parseInt(sample.readsRequested);
+        }
+        return reads;
         
     }
     
-    isUserLibrary(){
-        if(this.requestName.includes("Investigator")) {
-            this.userLibrary = true;   
+    isUserLibrary(){ //if sample belongs to user library (request Name is investigator prepared libraries), own lane or run
+        if(this.requestName.includes("Investigator")) { 
+           return true;  
+        } else {
+            return false;
         }
     }
-    canBeSplit(){
+    canBeSplit(){ //if sample is WES and can be split across multiple lanes/runs
         //only whole exome can be split
         if(this.recipe.includes("IDT_Exome")) {
-            this.wes = true;
+            return true;
+        } else {
+            return false;
         }
         
     }
