@@ -180,10 +180,10 @@ function HomePage() {
             } 
         // setAltConcentrationRuns(sortRowsByProperty('altConcentration', 'ascending'));
         //not updating 
-
+        setSampleIdRuns(sortRowsByProperty(arr, "sampleId", "ascending"));
         console.log(sortRowsByProperty(arr, "altConcentration", "ascending"));
-            console.log("sampleid", sortRowsByProperty(arr, "altConcentration", "ascending"));
-
+        console.log("sampleid", sortRowsByProperty(arr, "altConcentration", "ascending"));
+            
       setIsLoading(false);
       
       
