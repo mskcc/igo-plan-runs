@@ -1,6 +1,8 @@
+const ID = require('./uniqueId');
+
 class Lane {
-    constructor(id=0, totalLaneReads=0, samples=[], type, library, project) {
-        this.id = id++; // identify each lane by a unique id
+    constructor(totalLaneReads=0, samples=[], type, library, project) {
+        this.id = ID(); // identify each lane by a unique id
         this.totalLaneReads = totalLaneReads; // current number of reads in lane
         this.samples = samples; // array of samples to be loaded on a lane
         this.type = type; //this.readCapacity[type] to find range of read capacity, type of flowcell
@@ -34,7 +36,7 @@ class Lane {
         if (!barcodes.includes(barcodeFragment)) {
             this.addSample(sample);
         }
-    } // check lenght of barcode - minimm 6 letters and check whether first 6 are same
+    } // check length of barcode - minimum 6 letters and check whether first 6 are same
 }
 
 

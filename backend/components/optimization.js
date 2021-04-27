@@ -95,8 +95,6 @@ function optimizeUserLibraries(projects) {
     }
     recurse([], 0);
     
-    
-    
     return result;
 };
   console.log(sampleCombinations(arr));
@@ -110,7 +108,7 @@ function optimizeUserLibraries(projects) {
     const result = {"Runs": [], "Lanes": [], "Remaining": []} //runs array - array of run objects, lanes array of lane objects, remaining array- array of samples
     let ranges = Object.values(rangeLanes)
     let ranges2 = Object.values(rangeRuns);
-
+    let arr = samples;
     for(let sample of sampleCombinations(samples)) {
         let totalReads = 0;
         for(let element of sample) {
@@ -120,7 +118,9 @@ function optimizeUserLibraries(projects) {
         if (totalReads >= ranges2[0][0] && totalReads <= ranges2[0][1]) {
           let spRun = {"SP": []};
           for(let el of sample) {
+            let idx = arr.indexOf(el);
             spRun["SP"].push(el);
+            arr.splice(idx, 1);
           }
           result['Runs'].push(spRun);
           console.log('runs', result['Runs']);
@@ -128,23 +128,30 @@ function optimizeUserLibraries(projects) {
         else if(totalReads >= ranges2[1][0] && totalReads <= ranges2[1][1]) {
           let s1Run = {'S1': []};
           for(let el of sample) {
+            let idx = arr.indexOf(el);
             s1Run['S1'].push(el);
+            arr.splice(idx, 1);
           }
           result['Runs'].push(s1Run);
         } else if(totalReads >= ranges2[2][0] && totalReads <= ranges2[2][1]) {
           let s2Run = {'S2': []};
           for(let el of sample) {
+            let idx = arr.indexOf(el);
             s2Run['S2'].push(el);
+            arr.splice(idx, 1);
           }
         } else if (totalReads >= ranges2[3][0] && totalReads <= ranges3[3][1]) {
           let s4Run = {'S4':[]};
           for(let el of sample) {
+            let idx = arr.indexOf(el);
             s4Run['S4'].push(el);
+            arr.splice(idx, 1);
           }
         }
-        else if (totalReads < ranges[0][0] || (totalReads > ranges[0][1] && totalReads < ranges[1][0]) || (totalReads > ranges[1][1] && totalReads < ranges[2][0]) ||  
+        console.log('arr', arr);
+        if (totalReads < ranges[0][0] || (totalReads > ranges[0][1] && totalReads < ranges[1][0]) || (totalReads > ranges[1][1] && totalReads < ranges[2][0]) ||  
         (totalReads > ranges[2][1] && totalReads < ranges[3][0]) || (totalReads > ranges[3][1])){
-        for(let el of sample) {
+        for(let el of arr) {
           if(!result["Remaining"].includes(el)) {
             result["Remaining"].push(el);  
           } 

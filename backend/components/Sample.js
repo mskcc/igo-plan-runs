@@ -12,8 +12,6 @@ class Sample {
         this.project = project // requestId
         this.sampleConcentration = sampleConcentration;
         this.concentrationUnit = concentrationUnit;
-        this.wes = false;
-        this.userLibrary = false;
     }
     
     poolByReadLength(run) { //
@@ -26,15 +24,19 @@ class Sample {
         }
     }
 
-    isUserLibrary(){
-        if(this.library.includes("Investigator")) {
-            this.userLibrary = true;   
+    isUserLibrary(){ //if sample belongs to user library (request Name is investigator prepared libraries), own lane or run
+        if(this.requestName.includes("Investigator")) { 
+           return true;  
+        } else {
+            return false;
         }
     }
-    canBeSplit(){
+    canBeSplit(){ //if sample is WES and can be split across multiple lanes/runs
         //only whole exome can be split
         if(this.recipe.includes("IDT_Exome")) {
-            this.wes = true;
+            return true;
+        } else {
+            return false;
         }
         
     }
