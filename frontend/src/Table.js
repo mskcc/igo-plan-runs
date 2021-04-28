@@ -178,12 +178,7 @@ function HomePage() {
         return res;
               
             } 
-        // setAltConcentrationRuns(sortRowsByProperty('altConcentration', 'ascending'));
-        //not updating 
-        setSampleIdRuns(sortRowsByProperty(arr, "sampleId", "ascending"));
-        console.log(sortRowsByProperty(arr, "altConcentration", "ascending"));
-        console.log("sampleid", sortRowsByProperty(arr, "altConcentration", "ascending"));
-            
+        
       setIsLoading(false);
       
       
@@ -195,11 +190,8 @@ function HomePage() {
     handleRuns();
     
   }, []);
-  console.log('runs', altConcentrationRuns);
   
   
-
-
 
 const handleExport = () => {
   
@@ -207,25 +199,6 @@ exportExcel(filteredRuns, columns);
 };
 
 
-// setPooledRuns(sortRowsByProperty('pool', "ascending"));
-//       setSampleIdRuns(sortRowsByProperty('sampleId', "ascending"));
-//       setOtherSampleIdRuns(sortRowsByProperty('otherSampleId', "ascending"));
-//       setRecipeRuns(sortRowsByProperty('recipe', "ascending"));
-//       setTumorRuns(sortRowsByProperty('tumor', "ascending"));
-//       setPoolConcentrationRuns(sortRowsByProperty('concentration', "ascending"));
-//       setRequestIdRuns(sortRowsByProperty('requestId', "ascending"));
-//       setRequestNameRuns(sortRowsByProperty('requestName', "ascending"));
-//       setAltConcentrationRuns(sortRowsByProperty('altConcentration', "ascending"));
-//       setConcentrationUnitsRuns(sortRowsByProperty('concentrationUnits', "ascending"));
-//       setVolumeRuns(sortRowsByProperty('volume', "ascending"));
-//       setPlateIdRuns(sortRowsByProperty('plateId', "ascending"));
-//       setWellPosRuns(sortRowsByProperty('wellPos', "ascending"));
-//       setBarcodeSeqRuns(sortRowsByProperty('barcodeSeq', "ascending"));
-//       setBarcodeIdRuns(sortRowsByProperty('barcodeId', "ascending"));
-//       setRunTypeRuns(sortRowsByProperty('runType', "ascending"));
-//       setReadsRequestedRuns(sortRowsByProperty('readNum', "ascending"));
-//       setReadsRemainingRuns(sortRowsByProperty('remainingReads', "ascending"));
-//       setReadsAchievedRuns(sortRowsByProperty('readTotal', "ascending"));
 
   return (
     <div className={classes.container}>
