@@ -24,6 +24,7 @@ test('Samples are sorted correctly on sample id', () => {
 })
 
 test('Samples are sorted correctly on readsRequested', () => {
+    const sn = {0: {'readNum': ''}}
     
 })
 
