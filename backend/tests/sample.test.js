@@ -6,7 +6,7 @@ const should = require('chai').should();
 const { Sample } = require('../components/Sample');
 const { Lane } = require('../components/Lane');
 const { planRuns} = require('../components/optimization');
-const { runPlan } = require('../components/runPlan.js');
+const { runPlan } = require('../components/runPlanner.js');
 
 // describe('Sample index collisions work as expected', () => {
 //     const obj = new Sample('09931_10_1_1_1_1', 97.73, '3I', 'GAGCCCAT', 'Normal','PE100', 10)
