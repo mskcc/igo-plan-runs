@@ -23,3 +23,7 @@ test('Samples are sorted correctly on sample id', () => {
     expect(sortRowsByProperty([s3, s4, s2], 'sampleId', 'ascending')).toStrictEqual([{3: {'sampleId' : '06302_AK_33_1'}}, {4: {'sampleId' : '09259_H_103_2'}}, {2: {'sampleId': '09838_10_1_1_1_1'}} ]);
 })
 
+test('Samples are sorted correctly on readsRequested', () => {
+    
+})
+
