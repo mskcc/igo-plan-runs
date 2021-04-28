@@ -168,17 +168,18 @@ return result;
 
 // console.log("result", planRuns(arr));
 
-function binPacking(arr) {
+function binPacking(arr) { //takes in 
   let capacities = [800, 1800, 3800, 10000];
   let runs = ['SP', 'S1', 'S2', 'S4'];
   let totalReads = arr.reduce((acc, ele) => {
-    acc + ele;
+    return acc + ele;
   }, 0);
+  console.log(totalReads);
   function findWeight(totalReads) {
     let weight = 0;
     let run = ''
     for(let i = 0; i< capacities.length; i++) {
-      if (totalReads <= capacities[i]) {
+      if (totalReads >= capacities[i]) {
         weight = capacities[i]
         run = runs[i]
       }
@@ -187,30 +188,159 @@ function binPacking(arr) {
   }
   let weight = findWeight(totalReads)[0];
   let run = findWeight(totalReads)[1];
+  console.log(weight);
+  console.log("run", run);
+  arr.sort((a,b) => b-a);
   let samples = arr;
-  samples.sort((a,b) => b-a);
-  let i = 0;
-  let res =[];
+  let secondArr = JSON.parse(JSON.stringify(arr));
+samples.sort((a,b) => b-a);
 
+  let res =[];
+  let i = 0;
+  let j = 0;
   while(samples.length > 0) {
-    if(weight > 0 && i < samples.length) {
-      weight -= samples[i];
-      samples.splice(i, 1);
-    } else if(weight == 0) {
-      res.push(run)
-      remReads = samples.reduce((acc, ele) => {
-        acc + ele;
-      }, 0);
-      weight = findWeight(remReads)[0];
-      run = find
-    } else {
-        i += 1;
+    while (i < samples.length) {
+      if(weight > 0) {
+      weight -= samples[i]
+      samples.splice(i, 1)
+      j += 1
+      console.log('weight', weight);
     }
-  }
+      else if (weight == 0) {
+        res.push(run);
+        remReads = samples.reduce((acc, el) => {
+          return acc + el;
+        }, 0);
+        console.log('rem', remReads);
+        weight = findWeight(remReads)[0]
+        console.log('remWeight', weight);
+        run = findWeight(remReads)[1]
+      } 
+      else if(weight < 0) {
+        console.log("neg");
+        weight += secondArr[j-1];
+        console.log('arr',secondArr, secondArr[j-1]);
+        console.log('newWeight', weight);
+        i += 1;
+      }
+    } 
+    return res;
 
 }
+}
+
+let capacities = [800, 1800, 3800, 10000];
+  let runs = ['SP', 'S1', 'S2', 'S4'];
+  let totalReads = arr.reduce((acc, ele) => {
+    return acc + ele;
+  }, 0);
+  console.log(totalReads);
+  function findWeight(totalReads) {
+    let weight = 0;
+    let run = ''
+    for(let i = 0; i< capacities.length; i++) {
+      if (totalReads >= capacities[i]) {
+        weight = capacities[i]
+        run = runs[i]
+      }
+    }
+    return [weight, run];
+  }
+  let initialWeight = findWeight(totalReads)[0];
+  let initialRun = findWeight(totalReads)[1];
+
+function recurse(samples, weight, run) {
+  let arr = JSON.parse(JSON.stringify(samples));
+arr.sort((a,b) => b-a);
+let secondArr = JSON.parse(JSON.stringify(arr));
+  let res = []
+  let i =0;
+  let j = 0;
+  console.log(arr);
+  if(arr.length == 0) {
+    return res;
+  } 
+  while(arr.length > 0) {
+    weight -= arr[i]
+      arr.splice(i, 1);
+      j += 1;
+      console.log('weight', weight);
+      console.log("second", secondArr);
+      if(weight <= 0) {
+        if (weight == 0) { //add range to statement
+          res.push(run);
+          console.log('res', res);
+              remReads =arr.reduce((acc, el) => {
+                return acc + el;
+              }, 0);
+              console.log('rem', remReads);
+              weight = findWeight(remReads)[0]
+              console.log('remWeight', weight);
+              run = findWeight(remReads)[1];
+              console.log("remRUn", run);
+              recurse(arr, weight, run);
+        } else if (weight < 0) {
+          weight += arr[j-1];
+          arr.unshift(secondArr[j-1])
+          recurse(arr, weight, run)
+          console.log('arr', secondArr);
+          console.log("neg");
+          console.log(samples)
+          console.log(weight);
+        }
+        
+  } 
+// }// } if (weight < 0){
+//   //   console.log(arr[j-1]);
+//   //   weight += arr[j-1];
+//   //   samples.shift(arr[j-1]);
+//   //   recurse(samples, weight, run);
+//   // }
+  
+  }
+}
+// console.log("bin", binPacking([1000, 400, 800, 450, 300]));
+console.log(recurse([1000, 400, 800, 450, 300], 1800, 'S1'))
 
 
+function plan(samples) {
+  let capacities = [800, 1800, 3800, 10000];
+  let runs = ['SP', 'S1', 'S2', 'S4'];
+  let totalReads = arr.reduce((acc, ele) => {
+    return acc + ele;
+  }, 0);
+  console.log(totalReads);
+  function findWeight(totalReads) {
+    let weight = 0;
+    let run = ''
+    for(let i = 0; i< capacities.length; i++) {
+      if (totalReads >= capacities[i]) {
+        weight = capacities[i]
+        run = runs[i]
+      }
+    }
+    return [weight, run];
+  }
+  let weight = findWeight(totalReads)[0];
+  let run = findWeight(totalReads)[1];
+  
+  function bins(samples, weight, run, res){
+    let rem = weight;
+    samples.sort((a,b) => b-a);
+    for(let i =0; i < samples.length; i++) {
+      if (rem >= samples[i]) {
+        rem = rem-samples[i];
+      } else {
+        res.push(run);
+        rem = weight - samples[i];
+      }
+    }
+    return res;
+  }
+  console.log(bins(samples, weight, run, [])); 
+}
+
+console.log(plan([1000, 400, 800, 450, 300]))
 module.exports = {
    optimizeRuns,
    optimizeUserLibraries,
