@@ -6,6 +6,7 @@ import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.css';
 import LoadingOverlay from 'react-loading-overlay';
 import ReactDOM from 'react-dom';
+import sortRowsByProperty from './sortByProperty';
 
 
 
@@ -196,6 +197,7 @@ function HomePage() {
 const handleExport = () => {
   
 exportExcel(filteredRuns, columns);
+setAltConcentrationRuns(sortRowsByProperty(filteredRuns, 'altConcentration', 'ascending'));
 };
 
 
