@@ -53,19 +53,7 @@ function optimizeUserLibraries(projects) {
   '09838', 82.9, 'nM');
   let arr = [sample1, sample2, sample3]
 
-  function sampleCombinations(arr) {
-    let result = [];
-    function recurse(current, index){
-        result.push(current);
-        for(let i = index; i < arr.length; i++) {
-            recurse(current.concat(arr[i]), i + 1);
-        }
-    }
-    recurse([], 0);
-    
-    return result;
-};
-  console.log("combinations", sampleCombinations(arr));
+
   
 
   function planRuns(samples) { //takes in array of samples 

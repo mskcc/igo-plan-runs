@@ -1,3 +1,6 @@
+
+
+
 function noIndexCollision(samples){ // if lane does not include barcode seqs that are the same, push sample to lane
     let barcodes = []
     let minLength = 0;
@@ -29,3 +32,9 @@ function noIndexCollision(samples){ // if lane does not include barcode seqs tha
 module.exports = {
     noIndexCollision
 }
+
+//samples = run array
+// some samples - list of other samples (captured normal) with, word Pool in pool column
+// cannot group catpure by project. WES and capture = same as project 
+//  capture - pool has many projects, consider capture as, has pool id is capture, can 
+// be broken up by project

@@ -70,7 +70,7 @@ function poolSameLibrary(samples) {
     for (let sample of samples) {
       for(let obj of projectObjects) {
         if (sample.requestId == obj.requestId) {
-          obj.samples.push(new Sample(sample.sampleId, sample.barcodeSeq, sample.recipe, sample.runLength,
+          obj.samples.push(new Sample(sample.sampleId, sample.pool, sample.barcodeSeq, sample.recipe, sample.runLength,
             sample.readNum, sample.requestName, sample.requestId, sample.altConcentration, sample.concentrationUnits));
         
         }

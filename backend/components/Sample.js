@@ -2,14 +2,15 @@
 
 
 class Sample {
-    constructor(sampleId, barcodeSeq=[], recipe, runLength, readsRequested, library, project, sampleConcentration, concentrationUnit) {
+    constructor(sampleId, pool, barcodeSeq=[], recipe, runLength, readsRequested, requestName, requestId, sampleConcentration, concentrationUnit) {
         this.sampleId = sampleId;
+        this.pool = pool;
         this.barcodeSeq = barcodeSeq; // should be an array bc captured pools have arrays of barcode seqs
         this.recipe = recipe;
         this.runLength = runLength; // read length
         this.readsRequested = readsRequested;
-        this.library = library; //requestName
-        this.project = project // requestId
+        this.requestName = requestName; //requestName
+        this.requestId = requestId // project
         this.sampleConcentration = sampleConcentration;
         this.concentrationUnit = concentrationUnit;
     }
@@ -21,6 +22,14 @@ class Sample {
                     lane.addSample(this);
                 }
             }
+        }
+    }
+
+    isPooledNormal() {
+        if(this.pool.includes("Pool")) {
+            return true;
+        } else {
+            return false;
         }
     }
 
