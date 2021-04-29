@@ -12,7 +12,6 @@ function sampleCombinations(arr) {
   };
   
   
-  
   function runPlan(arr) { //takes in 
       let capacities = [800, 1800, 3800, 10000];
       let runs = ['SP', 'S1', 'S2', 'S4'];
