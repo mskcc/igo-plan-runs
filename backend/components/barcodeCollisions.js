@@ -1,40 +1,53 @@
+const { Sample } = require("./Sample");
 
 
+/**
+ * splits samples according to barcode collisions 
+ * @param  {Array} samples  input array of samples in run
+ * @param  {Number} numLanes number of lanes in run
+ * @param  {Number} capacity capacity of flow cell
+ * @return {Array}  array of lanes with distinct barcode seqs 
+ */
 
-function noIndexCollision(samples){ // if lane does not include barcode seqs that are the same, push sample to lane
-    let barcodes = []
-    let minLength = 0;
-    let duplicates = [];
-    for (let sample of samples) {
-        if (minLength < sample.barcodeSeq.length) {
+function splitBarcodes(samples, numLanes, capacity) {
+    let freq = {}
+    let ans = {}
+    let minLength = samples[0].barcodeSeq.length;
+    for(let sample of samples) {
+        if(minLength > sample.barcodeSeq.length) {
             minLength = sample.barcodeSeq.length;
         }
     }
-    for(let sample of samples) {
-        barcodes.push(sample.barcodeSeq);
-    }
-    barcodes.sort((a,b) => a-b);
-    let i =0; 
-    let j = 1;
-    while(i<barcodes.length) {
-        if(barcodes[i].slice(0, minLength) != barcodes[j].slice(0, minLength)) {
-            i += 1;
-            j += 1;
+    for(let i = 0; i < samples.length; i++) {
+        if(samples[i].barcodeSeq.substring(0, minLength) in freq) {
+            if (freq[samples[i].barcodeSeq.substring(0, minLength)] + 1 > numLanes) {
+                console.log("too many collisions");
+            }
+        }
+        if(samples[i].barcodeSeq.substring(0, minLength) in freq) {
+            freq[samples[i].barcodeSeq.substring(0, minLength)] += 1;
         } else {
-            duplicates.push(barcodes[j]);
-            barcodes.splice(j, 1);
+            freq[samples[i].barcodeSeq.substring(0, minLength)] = 1;
+        }
+        console.log("freq", freq);
+        if(freq[samples[i].barcodeSeq.substring(0, minLength)] in ans) {
+            ans[freq[samples[i].barcodeSeq.substring(0, minLength)]].push(samples[i])
+        } else {
+            ans[freq[samples[i].barcodeSeq.substring(0, minLength)]] = [samples[i]];
         }
     }
-    return [barcodes, duplicates];
-    
+
+    return Object.values(ans);
 }
 
+
+let sample1 = new Sample(1, "", "ACTAGC", "123", "PE150", 200, "ABC", "ABC", 120, "nM");
+let sample2 = new Sample(2, "", "ACTAGC-GCTACD", "123", "PE150", 200, "ABC", "ABC", 120, "nM")
+let sample3 = new Sample(3, "", "ACTAGT", "123", "PE150", 200, "ABC", "ABC", 120, "nM")
+let sample4 = new Sample(4, "", "ACTAGT-ACTTCA", "123", "PE150", 200, "ABC", "ABC", 120, "nM")
+
+console.log(splitBarcodes([sample1, sample2, sample3, sample4], 2, 400))
 module.exports = {
-    noIndexCollision
+    splitBarcodes
 }
 
-//samples = run array
-// some samples - list of other samples (captured normal) with, word Pool in pool column
-// cannot group catpure by project. WES and capture = same as project 
-//  capture - pool has many projects, consider capture as, has pool id is capture, can 
-// be broken up by project

@@ -2,7 +2,7 @@
 
 
 class Sample {
-    constructor(sampleId, pool, barcodeSeq=[], recipe, runLength, readsRequested, requestName, requestId, sampleConcentration, concentrationUnit) {
+    constructor(sampleId, pool, barcodeSeq, recipe, runLength, readsRequested, requestName, requestId, sampleConcentration, concentrationUnit) {
         this.sampleId = sampleId;
         this.pool = pool;
         this.barcodeSeq = barcodeSeq; // should be an array bc captured pools have arrays of barcode seqs
