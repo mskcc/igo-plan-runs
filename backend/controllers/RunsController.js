@@ -9,6 +9,7 @@ const { poolSameRunLength, poolSameLibrary,poolSameProject  } = require('../comp
 var fs = require('fs')
 const { Project } = require('../components/Project');
 const { Sample } = require('../components/Sample');
+const { runPlan } = require('../components/runPlanner');
 
 const columns = [
   { columnHeader: 'Pool', data: 'pool', editor: false },
@@ -87,8 +88,13 @@ exports.getRuns = [
           }
           return map;
         }
-        
-        console.log(groupReadsByRunLength());
+        let grid2 = poolSameRunLength(poolSameProject(grid));
+        console.log(grid2);
+        for(let [runLength, projects] of Object.entries(grid2)) {
+          let pooledRuns = runPlan(projects, runLength);
+          console.log("pooled", pooledRuns);
+        }
+        // console.log(groupReadsByRunLength());
 
 
         return apiResponse.successResponseWithData(res, 'success', {
@@ -114,3 +120,54 @@ generateGrid = (data) => {
   });
   return data;
 };
+
+exports.getPooledRuns = [
+  // authenticateRequest,
+  function (req, res) {
+    logger.log('info', 'Retrieving random quote');
+    let key = 'RUNS';
+    let retrievalFunction = () => getRuns();
+    let lanes = [];
+    
+   
+    getRuns()
+      .then((result) => {
+        console.log(result);
+        let grid = generateGrid(result.data);
+        
+        // console.log(poolSameProject(grid));
+        grid = poolSameRunLength(poolSameProject(grid));
+        for(let [runLength, projects] of Object.entries(grid)) {
+          let pooledRuns = runPlan(projects, runLength)['Runs'];
+          console.log("pooled", pooledRuns);
+        }
+       
+
+        // console.log(poolSameRunLength(poolSameProject(grid)));
+        function groupReadsByRunLength() {
+          let runLengths = poolSameRunLength(poolSameProject(grid));
+          let map = {}
+          for(let [runLength, projects] of Object.entries(runLengths)) {
+            let totalReadsByRunLength = 0;
+            for(let project of projects) {
+              totalReadsByRunLength += project.totalReads;
+            }
+            map[runLength] = totalReadsByRunLength;
+          }
+          return map;
+        }
+        
+        console.log("reads", groupReadsByRunLength());
+
+
+        return apiResponse.successResponseWithData(res, 'success', {
+          rows: grid,
+          columns: columns,
+        });
+      })
+      .catch((err) => {
+        return apiResponse.ErrorResponse(res, err.message);
+      });
+  },
+];
+

@@ -1,13 +1,13 @@
 // http://plvpipetrack1.mskcc.org:8099/pages/viewpage.action?pageId=25595196
 
 class Project {
-    constructor (requestId, runLength, samples = [], recipe, requestName) {
+    constructor (requestId, runLength, samples = [], recipe, requestName, totalReads=0) {
         this.requestId = requestId; 
         this.runLength = runLength; // one project same runlength
         this.samples = samples;
         this.recipe = recipe; // correlates with project, same project = same recipe
         this.requestName = requestName;
-        this.totalReads = 0
+        this.totalReads = totalReads
     }
 
     addSample(sample) {
@@ -24,6 +24,7 @@ class Project {
         let reads = 0;
         for(let sample of this.samples) {
             this.reads += parseInt(sample.readsRequested);
+            this.totalReads += parseInt(sample.readsRequested);
         }
         return reads;
         

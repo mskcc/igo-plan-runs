@@ -163,6 +163,7 @@ function HomePage() {
       setFilteredRuns(result.rows);
       
       setColumns(prev => [checkboxColumn, ...result.columns]);
+      // setColumns(result.columns);
 
       //function to sort data according to column header/property
       const arr = [...result.rows]

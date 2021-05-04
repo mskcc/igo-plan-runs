@@ -1,3 +1,4 @@
+const { Project } = require('./Project');
 
 /**
  * find all combinations that sum up to the target within the range
@@ -8,7 +9,15 @@
  */
 
 var combinationSum = function(arr, target, range) {
-    arr.sort((a, b) => (a - b));
+    for(let project of arr) {
+        project.getProjectReads();
+    
+      }
+      arr.sort((a,b) => {
+        let A = a.totalReads;
+        let B = b.totalReads;
+        return A < B ? 1 : -1;
+      })
     let result = [];
     visited = new Array(arr.length).fill(false);
         
@@ -28,7 +37,7 @@ var combinationSum = function(arr, target, range) {
                 continue;
             }
             visited[i] = true;
-            dfs(current.concat(arr[i]), currentSum + arr[i], i + 1, visited);
+            dfs(current.concat(arr[i]), currentSum + arr[i].totalReads, i + 1, visited);
             visited[i] = false;
         }
     }
@@ -37,7 +46,13 @@ var combinationSum = function(arr, target, range) {
     return result;
 };
 
-  console.log(combinationSum([550, 400, 300], 800, 100))
+
+let project3 = new Project('09259_H', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'DNAExtraction', 550);
+let project4 = new Project('06302_AK', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 400);
+let project5 = new Project('06302', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 300);
+
+
+  console.log("combo", combinationSum([project3, project4, project5], 800, 100))
 
   module.exports = {
       combinationSum
