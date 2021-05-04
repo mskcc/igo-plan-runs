@@ -79,7 +79,7 @@ const { combinationSum } = require('./comboSum');
           run = findWeight(remReads)[1]; // new run
           range = findWeight(remReads)[2]; // new range
           i = 0; // reset i to 0
-          combinationSum(samples, remWeight, range); //um... this works.
+          combinationSum(samples, remWeight, range); 
           
         } 
     } if(remWeight < 0) {

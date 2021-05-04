@@ -1,9 +1,9 @@
 const ID = require('./uniqueId');
 
 class Run {
-    constructor(lanes = [], type, runLength, projects=[]) {
+    constructor(type, runLength, projects=[]) {
         this.id = ID(); //unique id 
-        this.lanes = lanes; // array of lanes
+        this.lanes = []; // array of lanes
         this.type = type; // whether SP, S1, S2, or S4
         this.runLength = runLength; // read length
         this.projects = projects
@@ -11,6 +11,7 @@ class Run {
         this.isValid = false;
         this.totalLanes = 0; // current number of filled lanes in run
         this.readCapacity = {'SP':[700,800], 'S1': [1600, 1800], 'S2': [3600, 3800], 'S4': [9000, 10000]}
+        this.laneCapacity = {'SP':[350,400], 'S1': [800, 900], 'S2': [1800, 1900], 'S4': [2400, 2600]}
     }
 
     getTotalLanes() {
@@ -18,6 +19,14 @@ class Run {
         return numLanes[this.type];
     }
 
+    getCapacity() {
+        return this.readCapacity[this.type];
+    }
+
+    getLaneCapacity() {
+        return this.laneCapacity[this.type];
+    }
+    
     addLane(lane) {
         if (this.getTotalLanes() - this.totalLanes > 0) { 
 //if lane capacity has space for at least 1 more, add lane to run
