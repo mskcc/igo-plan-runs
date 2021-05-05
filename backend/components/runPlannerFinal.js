@@ -41,7 +41,7 @@ function sumArrReads(samples) {
         } else if(s2.length > 0) {
           let sumReads = 0;
           let sumArr = []
-          for(let combo of s1) {
+          for(let combo of s2) {
             sumReads = sumArrReads(combo);
             sumArr.push([sumReads, combo]);
           }

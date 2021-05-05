@@ -6,7 +6,7 @@ const ttl = 60 * 60 * 1; // cache for 1 Hour
 const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength, poolSameLibrary,poolSameProject  } = require('../components/PoolFunctions');
-var fs = require('fs')
+const fs = require('fs')
 const { Project } = require('../components/Project');
 const { Sample } = require('../components/Sample');
 const { runPlan } = require('../components/runPlanner');
@@ -73,9 +73,11 @@ exports.getRuns = [
     getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
-        
+        let data = JSON.stringify(grid);
+        fs.writeFileSync('samples.json', data);
+
         // console.log(poolSameProject(grid));
-        console.log(poolSameRunLength(poolSameProject(grid)));
+        // console.log(poolSameRunLength(poolSameProject(grid)));
         function groupReadsByRunLength() {
           let runLengths = poolSameRunLength(poolSameProject(grid));
           let map = {}
@@ -89,10 +91,10 @@ exports.getRuns = [
           return map;
         }
         let grid2 = poolSameRunLength(poolSameProject(grid));
-        console.log(grid2);
+        // console.log(grid2);
         for(let [runLength, projects] of Object.entries(grid2)) {
           let pooledRuns = runPlan(projects, runLength);
-          console.log("pooled", pooledRuns);
+          // console.log("pooled", pooledRuns);
         }
         // console.log(groupReadsByRunLength());
 

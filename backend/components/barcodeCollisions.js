@@ -1,7 +1,7 @@
 const { Lane } = require("./Lane");
 const { Run } = require("./Run");
 const { Sample } = require("./Sample");
-
+const { Project } = require('./Project')
 
 /**
  * splits samples according to barcode collisions 
@@ -19,7 +19,9 @@ function splitBarcodes(run) {
     let projects = run.projects;
     let samples = []
     for(let project of projects) {
-        samples.push(project.samples);
+        for(let sample of project.samples) {
+            samples.push(sample);
+        }
     }
     let minLength = samples[0].barcodeSeq.length;
     for(let sample of samples) {
@@ -32,9 +34,7 @@ function splitBarcodes(run) {
     
     for(let i = 0; i < samples.length; i++) {
         let fragment = samples[i].barcodeSeq.substring(0, minLength);
-        if(samples[i].pool.includes("Pool")) {
-            fragment = samples[i].barcodeSeq;
-        }
+        
         
         if(fragment in freq) {
             if (freq[fragment] + 1 > numLanes) {
@@ -47,7 +47,6 @@ function splitBarcodes(run) {
         } else {
             freq[fragment] = 1;
         }
-        console.log("freq", freq);
         
         
         if(freq[fragment]in ans) {
@@ -101,7 +100,15 @@ let sample4 = new Sample(4, "", "ACTAGT-ACTTCA", "123", "PE150", 200, "ABC", "AB
 let sample5 = new Sample(5, "Pool", "ACTAGG", "123", "PE150", 75, "ABC", "ABC", 120, "nM")
 let sample6 = new Sample(6, "Pool", "ACTAGG", "123", "PE150", 200, "ABC", "ABC", 120, "nM");
 
-let run1 = new Run("SP", "PE150", [sample1, sample2, sample3, sample4, sample5, sample6])
+let project1 = new Project('09838', 'PE100', [sample1, sample2, sample3], 'ShallowWGS', 'sWGS', 1000);
+let project2 = new Project('09931', 'PE100', [sample4, sample5, sample6], 'WholeGenomeSequencing', 'WholeGenome', 400);
+let project3 = new Project('09259_H', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'DNAExtraction', 800);
+let project4 = new Project('06302_AK', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 450);
+let project5 = new Project('06302', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 300);
+let projectArray = [project1, project2, project3, project4, project5];
+
+
+let run1 = new Run("SP", "PE150", [project1, project2]);
 console.log(splitBarcodes(run1));
 
 module.exports = {
