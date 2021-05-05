@@ -16,7 +16,11 @@ function splitBarcodes(run) {
 
     let ans = {}
     let remaining = [];
-    let samples = run.projects;
+    let projects = run.projects;
+    let samples = []
+    for(let project of projects) {
+        samples.push(project.samples);
+    }
     let minLength = samples[0].barcodeSeq.length;
     for(let sample of samples) {
         if(minLength > sample.barcodeSeq.length) {

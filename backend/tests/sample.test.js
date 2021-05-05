@@ -60,7 +60,7 @@ describe('result of plan Runs function', () => {
 
 describe('result of binPacking algorithm', () => {
     it('should return SP and S1', () => {
-        expect(runPlan([1000, 400, 800, 450, 300])).to.eql([['S1', 'SP'], [450]])
+        expect(runPlan([1000, 400, 800, 450, 300])).to.eql([['S1', 'SP'], [400]])
     })
     it('should return S1', () => {
         expect(runPlan([1700])).to.eql(['S1'])

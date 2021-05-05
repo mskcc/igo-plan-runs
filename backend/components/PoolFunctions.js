@@ -1,10 +1,10 @@
 // #2 requirement, pooling together samples of same read length
 // return map with keys equal to read length, and values are arrays of samples with matching read length
 
-const { Project } = require("../components/Project");
-const { Run } = require("../components/Run");
-const { Sample } = require("../components/Sample");
-const { Lane }  = require('../components/Lane');
+const { Project } = require("./Project");
+const { Run } = require("./Run");
+const { Sample } = require("./Sample");
+const { Lane }  = require('./Lane');
 // numbers in Mils
 const flowcells = {"SP": [[350,400], [700,800]], "S1": [[800,900], [1600,1800]], "S2": [[1800,1900], [3600,3800]], "S4": [[2400,2600], [9000,10000]]}
 
