@@ -33,12 +33,12 @@ const columns = [
   { columnHeader: 'Barcode ID', data: 'barcodeId', editor: false },
   { columnHeader: 'Run Length', data: 'runType', editor: false },
   {
-    columnHeader: 'Reads Requested.',
+    columnHeader: 'Reads Requested',
     data: 'readNum',
     editor: false,
     type: 'numeric',
   }, {
-    columnHeader: 'Reads Remaining.',
+    columnHeader: 'Reads Remaining',
     data: 'remainingReads',
     editor: false,
     type: 'numeric',

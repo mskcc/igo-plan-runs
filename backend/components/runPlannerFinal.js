@@ -106,7 +106,7 @@ function sumArrReads(samples) {
     }
     if(sp.length == 0 && s1.length == 0 && s2.length ==0 && s4.length ==0) {
         result['Remaining'] = samples;
-      console.log([res, samples])
+      // console.log([res, samples])
       return result;
     } 
     
@@ -129,7 +129,7 @@ let project4 = new Project('06302_AK', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probe
 let project5 = new Project('06302', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 300);
 let projectArray = [project1, project2, project3, project4, project5];
 
-console.log("bin", planRuns(projectArray, 'PE100'));
+// console.log("bin", planRuns(projectArray, 'PE100'));
 
 
 module.exports  = {

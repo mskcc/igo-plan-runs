@@ -13,11 +13,11 @@ var combinationSum = function(arr, target, range) {
         project.getProjectReads();
     
       }
-      arr.sort((a,b) => {
-        let A = a.totalReads;
-        let B = b.totalReads;
-        return A < B ? 1 : -1;
-      })
+    //   arr.sort((a,b) => {
+    //     let A = a.totalReads;
+    //     let B = b.totalReads;
+    //     return A < B ? 1 : -1;
+    //   })
     let result = [];
     visited = new Array(arr.length).fill(false);
         
@@ -52,7 +52,7 @@ let project4 = new Project('06302_AK', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probe
 let project5 = new Project('06302', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 300);
 
 
-  console.log("combo", combinationSum([project3, project4, project5], 800, 100))
+//   console.log("combo", combinationSum([project3, project4, project5], 800, 100))
 
   module.exports = {
       combinationSum

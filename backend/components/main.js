@@ -11,22 +11,24 @@ let data  = JSON.parse(raw);
 function mainRunPlanner(samples) {
     let result = {"Runs": [], "Lanes": [], "Remaining" : []};
     let input = poolSameRunLength(poolSameProject(samples));
+    // console.log(input);
     let runs;
     let processedRunsByBarcodes = [];
     for(let [runLength, projects] of Object.entries(input)) {
         runs = planRuns(projects, runLength)['Runs'];
+        console.log(runs);
+        let rem = planRuns(projects, runLength)["Remaining"];
+        console.log(rem);
         result["Remaining"].push(planRuns(projects,runLength)['Remaining']);
         for(let run of runs) {
             processedRunsByBarcodes.push(splitBarcodes(run));
         }
     }
+    console.log("processed", processedRunsByBarcodes);
+    // console.log(runs);
     for(let pool of processedRunsByBarcodes) {
         for(let run of pool['Runs']) {
             result['Runs'].push(run);
-        }
-        for(let rem of pool['Remaining']) {
-            console.log("rem", rem);
-            result['Remaining'].push(rem);
         }
     }
 

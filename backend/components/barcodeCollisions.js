@@ -29,12 +29,22 @@ function splitBarcodes(run) {
             minLength = sample.barcodeSeq.length;
         }
     }
-
+    let recipeMap = {}
+    for(let sample of samples) {
+        recipeMap[sample.recipe] = [];
+    }
+    for(let sample of samples) {
+        recipeMap[sample.recipe].push(sample);
+    }
+    
     let freq = {}
     
     for(let i = 0; i < samples.length; i++) {
-        let fragment = samples[i].barcodeSeq.substring(0, minLength);
         
+        let fragment = samples[i].barcodeSeq.substring(0, minLength);
+        // if(samples[i].pool.includes("Pool")) {
+        //     freq[samples[i].barcodeSeq] = 1;
+        // }
         
         if(fragment in freq) {
             if (freq[fragment] + 1 > numLanes) {
@@ -80,15 +90,15 @@ function splitBarcodes(run) {
         
     }
 
-    for(let sample of run.lanes) {
-        console.log("lane", sample);
-    }
+    // for(let sample of run.lanes) {
+    //     console.log("lane", sample);
+    // }
     
 
     res["Runs"].push(run);
     res["Remaining"] = remaining;
-   console.log("remaining", res["Remaining"]);
-   console.log(res);
+//    console.log("remaining", res["Remaining"]);
+//    console.log(res);
     return res;
 }
 
@@ -109,7 +119,7 @@ let projectArray = [project1, project2, project3, project4, project5];
 
 
 let run1 = new Run("SP", "PE150", [project1, project2]);
-console.log(splitBarcodes(run1));
+// console.log(splitBarcodes(run1));
 
 module.exports = {
     splitBarcodes

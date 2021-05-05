@@ -1,5 +1,5 @@
 var combinationSum = function(arr, target, range) {
-    arr.sort((a, b) => (a - b));
+    
     let result = [];
     visited = new Array(arr.length).fill(false);
         
