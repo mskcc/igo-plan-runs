@@ -1,7 +1,7 @@
 const { Project } = require('./Project');
 
 /**
- * find all combinations that sum up to the target within the range
+ * find all combinations that sum up to the target within the range (max - min read capacity)
  * @param  {Array} arr  input array of projects' total reads of samples
  * @param  {Number} target  target sum
  * @param  {Number} range  range that sum needs to be within of target
@@ -13,11 +13,11 @@ var combinationSum = function(arr, target, range) {
         project.getProjectReads();
     
       }
-    //   arr.sort((a,b) => {
-    //     let A = a.totalReads;
-    //     let B = b.totalReads;
-    //     return A < B ? 1 : -1;
-    //   })
+      arr.sort((a,b) => {
+        let A = a.totalReads;
+        let B = b.totalReads;
+        return A < B ? 1 : -1;
+      })
     let result = [];
     visited = new Array(arr.length).fill(false);
         
@@ -47,12 +47,6 @@ var combinationSum = function(arr, target, range) {
 };
 
 
-let project3 = new Project('09259_H', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'DNAExtraction', 550);
-let project4 = new Project('06302_AK', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 400);
-let project5 = new Project('06302', 'PE100', [], 'IDT_Exome_v1_FP_Viral_Probes', 'WholeExome-KAPALib', 300);
-
-
-//   console.log("combo", combinationSum([project3, project4, project5], 800, 100))
 
   module.exports = {
       combinationSum

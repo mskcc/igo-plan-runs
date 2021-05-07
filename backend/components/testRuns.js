@@ -1,33 +1,22 @@
-var combinationSum = function(arr, target, range) {
-    
-    let result = [];
-    visited = new Array(arr.length).fill(false);
-        
-    function dfs(current, currentSum, startIndex, visited){
-        if(currentSum == target ) {
-            result.push(current);
-            return;
-        }
-        if (Math.abs(currentSum - target) <= range && currentSum <= target) {
-            result.push(current)
-        }
-        if (currentSum > target) {
-            return;
-        }
-        for (let i = startIndex; i < arr.length; i++) {
-            if(i > 0 && arr[i] == arr[i - 1] && !visited[i - 1]) {
-                continue;
-            }
-            visited[i] = true;
-            dfs(current.concat(arr[i]), currentSum + arr[i], i + 1, visited);
-            visited[i] = false;
-        }
-    }
-    
-    dfs([], 0, 0, visited);
-    return result;
-};
+const { combinationSum} = require('./comboSum');
 
+    function difference(samples, sumArr) {
+        let i =0;
+        let j = 0;
+        samples.sort((a,b) => b-a)
+        sumArr.sort((a,b) => b-a)
+        
+        for(let i = 0; i < samples.length; i++) {
+          for(let j =0; j < sumArr.length; j++) {
+            if(samples[i] == sumArr[j]) {
+              samples.splice(i, 1)
+            }
+          }
+        
+          
+        }
+        return samples
+      }
 
 function sumArrReads(arr) {
   return arr.reduce((acc, el) => {return acc + el}, 0);
@@ -54,7 +43,7 @@ function planRuns(samples) {
             return a[0] < b[0] ? 1: -1;
             });
           res.push('S4', sumArr[0][1]);
-          samples = samples.filter(el => !sumArr[0][1].includes(el));
+          samples = difference(samples, sumArr[0][1])
         sp = combinationSum(samples,  runs['SP'][0], runs['SP'][1]);
         s1 = combinationSum(samples,  runs['S1'][0], runs['S1'][1]);
         s2 = combinationSum(samples,  runs['S2'][0], runs['S2'][1]);
@@ -70,7 +59,7 @@ function planRuns(samples) {
           return a[0] < b[0] ? 1: -1;
           });
         res.push('S2', sumArr[0][1]);
-        samples = samples.filter(el => !sumArr[0][1].includes(el));
+        samples = difference(samples, sumArr[0][1])
         sp = combinationSum(samples,  runs['SP'][0], runs['SP'][1]);
         s1 = combinationSum(samples,  runs['S1'][0], runs['S1'][1]);
         s2 = combinationSum(samples,  runs['S2'][0], runs['S2'][1]);
@@ -87,7 +76,7 @@ function planRuns(samples) {
           return a[0] < b[0] ? 1: -1;
           });
         res.push('S1', sumArr[0][1]);
-        samples = samples.filter(el => !sumArr[0][1].includes(el));
+        samples = difference(samples, sumArr[0][1])
         sp = combinationSum(samples,  runs['SP'][0], runs['SP'][1]);
         s1 = combinationSum(samples,  runs['S1'][0], runs['S1'][1]);
         s2 = combinationSum(samples,  runs['S2'][0], runs['S2'][1]);
@@ -104,7 +93,7 @@ function planRuns(samples) {
           return a[0] < b[0] ? 1: -1;
           });
         res.push('SP', sumArr[0][1]);
-        samples = samples.filter(el => !sumArr[0][1].includes(el));
+        samples = difference(samples, sumArr[0][1])
         sp = combinationSum(samples,  runs['SP'][0], runs['SP'][1]);
         s1 = combinationSum(samples,  runs['S1'][0], runs['S1'][1]);
         s2 = combinationSum(samples,  runs['S2'][0], runs['S2'][1]);
@@ -126,8 +115,13 @@ console.log("plan6", planRuns([2000, 400, 350] ));
 console.log("plan7", planRuns([1000, 400, 800, 550, 300]));
 console.log("plan8", planRuns([2000, 400, 350] ));
 console.log("plan9", planRuns([9000] ));
+console.log('plan11', planRuns([400, 400, 400, 400, 400]))
 
 // [550, 400, 310, 300] result:SP, remaining [550,300];
 // [1000, 500, 250, 50, 25] result: S1, remaining 25;
 // [1000, 900, 500, 300] result: S1, remaining 900;
 // [500, 100] result: [], remaining [500,100];
+
+module.exports = {
+    planRuns
+}

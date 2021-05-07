@@ -1,12 +1,12 @@
 /**
- * poolUserLibraries pools user libraries according to project (requestId) and puts them in runs/lanes
+ * groupUserLibraries groups user libraries according to project (requestId) and puts them in runs/lanes
  * @param  {Array} projects array of project objects 
  * @return {Array} returns array of run objects
  */
 
 const { Run } = require("./Run");
 
-function poolUserLibraries(projects) {
+function groupUserLibraries(projects) {
     let res = {"Runs": [], "Remaining": []}
     let remaining = []
     let capacities = {'SP':[700,800], 'S1': [1600, 1800], 'S2': [3600, 3800], 'S4': [9000, 10000]}
@@ -47,5 +47,5 @@ function poolUserLibraries(projects) {
     }
 
 module.exports = {
-    poolUserLibraries 
+    groupUserLibraries 
 }

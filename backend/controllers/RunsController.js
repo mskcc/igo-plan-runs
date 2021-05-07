@@ -74,31 +74,10 @@ exports.getRuns = [
       .then((result) => {
         let grid = generateGrid(result.data);
         let data = JSON.stringify(grid);
+
         fs.writeFileSync('samples.json', data);
 
-        // console.log(poolSameProject(grid));
-        // console.log(poolSameRunLength(poolSameProject(grid)));
-        function groupReadsByRunLength() {
-          let runLengths = poolSameRunLength(poolSameProject(grid));
-          let map = {}
-          for(let [runLength, projects] of Object.entries(runLengths)) {
-            let totalReadsByRunLength = 0;
-            for(let project of projects) {
-              totalReadsByRunLength += project.totalReads;
-            }
-            map[runLength] = totalReadsByRunLength;
-          }
-          return map;
-        }
-        let grid2 = poolSameRunLength(poolSameProject(grid));
-        // console.log(grid2);
-        for(let [runLength, projects] of Object.entries(grid2)) {
-          let pooledRuns = runPlan(projects, runLength);
-          // console.log("pooled", pooledRuns);
-        }
-        // console.log(groupReadsByRunLength());
-
-
+  
         return apiResponse.successResponseWithData(res, 'success', {
           rows: grid,
           columns: columns,
