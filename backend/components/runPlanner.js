@@ -6,32 +6,7 @@ const { Run } = require('./Run');
 const { Project } = require('./Project');
 const { Sample } = require('./Sample');
 
-function sumArrReads(projects) { // sum up the reads in a project
-    // for(let project of projects) {
-    //     project.getProjectReads();
-    // }
-    return projects.reduce((acc, el) => {return acc + el.totalReads}, 0);
-  }
-  
-  function difference(projects, sumArr) { // returns an array of projects that are remaining 
-    let i =0;
-    let j = 0;
-    projects.sort((a,b) => b-a)
-    sumArr.sort((a,b) => b-a)
-    
-    for(let i = 0; i < projects.length; i++) {
-      for(let j =0; j < sumArr.length; j++) {
-        if(projects[i] == sumArr[j]) {
-          projects.splice(i, 1)
-        }
-      }
-    
-      
-    }
-    return projects
-  }
-
-  /**
+/**
  * find all flowcells that the projects can fit in, and return runs and projects that don't fit 
  * @param  {Array} projects  input array of projects
  * @param  {String} runLength input run length of projects  
@@ -51,118 +26,45 @@ function sumArrReads(projects) { // sum up the reads in a project
 // 6. Return result with runs in runs array and remaining projects go in leftover array. 
 
 
-
+let removeItems = function(arr, indexes) {
+  let j = 0;
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (j < indexes.length && i == indexes[j]) {
+      j++;
+    } else {
+      result.push(arr[i]);
+    }
+  }
+  return result;
+}
 
   function determineFlowCells(projects, runLength) {
     let result = {"Runs": [], "Lanes": [], "Remaining": []}; // result
-    const runs = {'SP': [800, 100], 'S1' : [1800, 200], 'S2': [3800, 200], 'S4': [10000, 1000]}; //first is max capacity, second is range(max-min capacity)
-    let sp = combinationSum(projects,  runs['SP'][0], runs['SP'][1]); // find all combinations of projects that fit in a SP
-    let s1 = combinationSum(projects,  runs['S1'][0], runs['S1'][1]); // find all combinations of projects that fit in a S1
-    let s2 = combinationSum(projects,  runs['S2'][0], runs['S2'][1]); // find all combinations of projects that fit in a S2
-    let s4 = combinationSum(projects,  runs['S4'][0], runs['S4'][1]); // find all combinations of projects that fit in a S4
-    
-    while (sp.length > 0 || s1.length > 0 || s2.length > 0 || s4.length > 0) { // while there are combinations that fit in a flowcell, run this code
-        if(s4.length > 0) { // start with biggest flowcell
-          let sumReads = 0; 
-          let sumArr = [] // array containing total reads of a combination and the combination itself
-          for(let combo of s4) {
-            sumReads = sumArrReads(combo); // sum up the reads of the various combinations 
-            sumArr.push([sumReads, combo]); // push sumreads onto an array with the combination as well
-          } // sumArr[0] = combination with greatest reads
-          // sumArr[0][0] = total reads of combination
-          // sumArr[0][1] = combination with greatest reads
-          sumArr.sort((a,b) => { //sort the array of combination sums from largest to smallest 
-            return a[0] < b[0] ? 1: a[0] > b[0] ? -1 : 0;
-          });
-
-            let runObj = new Run('S4', runLength)
-            runObj.projects = sumArr[0][1]; // set projects array equal to the combination of projects 
-          
-            result['Runs'].push(runObj); // push the run 
-          projects = difference(projects, sumArr[0][1]); // remove projects that are accounted for in flow cell
-
-          // find combinations again of remaining projects in projects array
-          sp = combinationSum(projects,  runs['SP'][0], runs['SP'][1]);
-          s1 = combinationSum(projects,  runs['S1'][0], runs['S1'][1]);
-          s2 = combinationSum(projects,  runs['S2'][0], runs['S2'][1]);
-          s4 = combinationSum(projects,  runs['S4'][0], runs['S4'][1]);
-        } else if(s2.length > 0) {
-          let sumReads = 0;
-          let sumArr = []
-          for(let combo of s2) {
-            sumReads = sumArrReads(combo);
-            sumArr.push([sumReads, combo]);
-          }
-          sumArr.sort((a,b) => {
-            return a[0] < b[0] ? 1: a[0] > b[0] ? -1 : 0;
-            });
-            let runObj = new Run('S2', runLength)
-            runObj.projects = sumArr[0][1];
-            result['Runs'].push(runObj);
-         
-          projects = difference(projects, sumArr[0][1]);
-          sp = combinationSum(projects,  runs['SP'][0], runs['SP'][1]);
-          s1 = combinationSum(projects,  runs['S1'][0], runs['S1'][1]);
-          s2 = combinationSum(projects,  runs['S2'][0], runs['S2'][1]);
-          s4 = combinationSum(projects,  runs['S4'][0], runs['S4'][1]);
-        }else if(s1.length > 0) {
-          let sumReads = 0;
-          let sumArr = []
-
-          for(let combo of s1) {
-            sumReads = sumArrReads(combo);
-            sumArr.push([sumReads, combo]);
-          }
-          sumArr.sort((a,b) => {
-            return a[0] < b[0] ? 1: a[0] > b[0] ? -1 : 0;
-            });
-       
-          let runObj = new Run('S1', runLength)
-            runObj.projects = sumArr[0][1];
-            
-            result['Runs'].push(runObj);
-          
-          projects = difference(projects, sumArr[0][1]);
-          sp = combinationSum(projects,  runs['SP'][0], runs['SP'][1]);
-          s1 = combinationSum(projects,  runs['S1'][0], runs['S1'][1]);
-          s2 = combinationSum(projects,  runs['S2'][0], runs['S2'][1]);
-          s4 = combinationSum(projects,  runs['S4'][0], runs['S4'][1]);
-        }
-        else if(sp.length > 0) {
-          let sumReads = 0;
-          let sumArr = []
-          for(let combo of sp) {
-            sumReads = sumArrReads(combo);
-            sumArr.push([sumReads, combo]);
-          }
-          sumArr.sort((a,b) => {
-            return a[0] < b[0] ? 1: a[0] > b[0] ? -1 : 0;
-          });
-          
-          let runObj = new Run('SP', runLength)
-          runObj.projects = sumArr[0][1];
-          
-          result['Runs'].push(runObj);
-          projects = difference(projects, sumArr[0][1]);
-          sp = combinationSum(projects,  runs['SP'][0], runs['SP'][1]);
-          s1 = combinationSum(projects,  runs['S1'][0], runs['S1'][1]);
-          s2 = combinationSum(projects,  runs['S2'][0], runs['S2'][1]);
-          s4 = combinationSum(projects,  runs['S4'][0], runs['S4'][1]);
-        }
+    const runs = {'SP': [800, 100], 'S1' : [1800, 200], 'S2': [3800, 200], 'S4': [10000, 1000]}; //max capacity, range (max- min capacity of flow cell)
+  let priority = ['S4', 'S2', 'S1', 'SP']
+  priority.forEach(p => {
+    let target = runs[p][0];
+    let range = runs[p][1];
+    let allocations = combinationSum(projects, target, range);
+    // returns the indices and not the value
+    while (allocations.length > 0) {
+      let runObj = new Run(p, runLength)
+      runObj.projects = allocations.map((index) => projects[index]);
+      result['Runs'].push(runObj); // push the run
+      projects = removeItems(projects, allocations);    
+      allocations = combinationSum(projects, target, range);
     }
+  });
+  result['Remaining'] = projects;
     for(let run of result["Runs"]) {
       run.addTotalReads();
-      // console.log("runReads", run.totalReads);
-      for(let project of run.projects) {
-        // project.getProjectReads()
-        // console.log("project", project.totalReads);
-      }
-    }
+  }
     //if there are no further combinations left for any flowcell, return remaining projects in array in "remaining" array
-    if(sp.length == 0 && s1.length == 0 && s2.length ==0 && s4.length ==0) {
+    
         result['Remaining'] = projects;
       return result;
-    } 
+    
     
   }
 

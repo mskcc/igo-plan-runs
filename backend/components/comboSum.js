@@ -13,11 +13,11 @@ const { Project } = require('./Project');
 //     //     project.getProjectReads();
     
 //     //   }
-//       arr.sort((a,b) => {
-//         let A = a.totalReads;
-//         let B = b.totalReads;
-//         return A < B ? 1 : A > B ? -1 : 0;
-//       })
+    //   arr.sort((a,b) => {
+    //     let A = a.totalReads;
+    //     let B = b.totalReads;
+    //     return A < B ? 1 : A > B ? -1 : 0;
+    //   })
 //     let result = [];
 //     visited = new Array(arr.length).fill(false);
         
@@ -42,38 +42,115 @@ const { Project } = require('./Project');
 //     return result;
 // };
 
-var combinationSum = function(arr, target, range) {
-    
-    if (!arr || !arr.length) { return []; }
-    
-    // for(let project of arr) {
+
+function sumArrReads(projects) { // sum up the reads in a project
+    // for(let project of projects) {
     //     project.getProjectReads();
-    
-    //   }
-      arr.sort((a,b) => {
-        let A = a.totalReads;
-        let B = b.totalReads;
-        return A < B ? 1 : A > B ? -1 : 0;
-      })
+    // }
+    return projects.reduce((acc, el) => {return acc + el.totalReads}, 0);
+  }
 
-    // arr.sort((a,b) => a-b);
-    const solutions = [];
+  let INF = 1000000000;
+  let MAX_ARR_LENGTH = 100;
+  let MAX_TARGET = 10000;
+  
+  
+  
+  
+  var combinationSum = function(arr, target, range) {
+      let minCapacity = target - range;
+      if (sumArrReads(arr) < minCapacity) {
+        return [];
+      }
+      let sel = new Array(arr.length);
+      let dp = new Array(arr.length);
+      for (let i = 0; i <= target; i++) {
+        sel[i] = new Array(target + 1).fill(0);
+        dp[i] = new Array(target + 1).fill(-1);
+      }
+     
+      // O(maxCapacity * len(arr)) = 10^4 * 100 = 10^6
+      // O(maxCapacity * len(arr))
+      // 10^7 ops / sec
+      function rec(arr, index, remainingCapacity) {
+        if (remainingCapacity < 0) {
+          return INF;
+        } else if (index >= arr.length) {
+          var usedCapacity = target - remainingCapacity
+          return (usedCapacity < minCapacity) ? INF : remainingCapacity;
+        } else if (dp[index][remainingCapacity] != -1) {
+          return dp[index][remainingCapacity];
+        }
+        let a = rec(arr, index + 1, remainingCapacity); // do not select the element
+        let b = rec(arr, index + 1, remainingCapacity - arr[index].totalReads); // do select the element
+        let minValue = INF;
+        if (a < b) {
+          sel[index][remainingCapacity] = false;
+          // console.log("False", index, remainingCapacity);
+          minValue = a;
+        } else {
+          sel[index][remainingCapacity] = true;
+          // console.log("True", index, remainingCapacity);
+          minValue = b;
+        }
+        dp[index][remainingCapacity] = minValue;
+        return minValue;
+      }
+   
+   
+      let selectedCapacity = target - rec(arr, 0, target);
+      // console.log("selected", selectedCapacity);
+      if (selectedCapacity < minCapacity || selectedCapacity > target) {
+        return [];
+      }
+  
+      // console.log(sel);
+  
+     
+      let result = [];
+      let current = target;
+      for (let index = 0; index < arr.length; index++) {
+        // console.log(index, current, sel[index][current], dp[index][current]);
+        if (sel[index][current]) {
+          result.push(index);
+          current -= arr[index].totalReads;
+        }
+      }
+      // console.log(result);
+      return result;
+    }
+// var combinationSum = function(arr, target, range) {
     
-    const findCombos = function(idx, subtotal, solution) {
-        for (let i = idx; i < arr.length; i++) {
-            if (subtotal + arr[i].totalReads <= target && (target - (subtotal+arr[i].totalReads)) <= range) { 
-                solutions.push(solution.concat(arr[i])); 
-            } else if (subtotal + arr[i].totalReads < (target-range) && i + 1 < arr.length) { 
-                findCombos(i + 1, subtotal + arr[i].totalReads, solution.concat(arr[i])); 
-            }
-            while (arr[i + 1] === arr[i]) { i++; }
-        };
-    };
+//     if (!arr || !arr.length) { return []; }
+    
+//     // for(let project of arr) {
+//     //     project.getProjectReads();
+    
+//     //   }
+//       arr.sort((a,b) => {
+//         let A = a.totalReads;
+//         let B = b.totalReads;
+//         return A < B ? 1 : A > B ? -1 : 0;
+//       })
 
-    findCombos(0, 0, []);
-    return solutions;
+//     // arr.sort((a,b) => a-b);
+//     const solutions = [];
     
-};
+//     const findCombos = function(idx, subtotal, solution) {
+//         for (let i = idx; i < arr.length; i++) {
+//             if (subtotal + arr[i].totalReads <= target && (target - (subtotal+arr[i].totalReads)) <= range) { 
+//                 solutions.push(solution.concat(arr[i])); 
+//             } else if (subtotal + arr[i].totalReads < (target-range) && i + 1 < arr.length) { 
+//                 findCombos(i + 1, subtotal + arr[i].totalReads, solution.concat(arr[i])); 
+//             }
+//             while (arr[i + 1] === arr[i]) { i++; }
+//         };
+//     };
+
+//     findCombos(0, 0, []);
+//     return solutions;
+    
+// };
 
 
 
