@@ -11,17 +11,22 @@ let data  = JSON.parse(raw);
 
 function mainRunPlanner(samples) {
     let result = {"Runs": [], "Lanes": [], "Remaining" : []};
-    
+    // let userLibraries = groupUserLibraries(poolSameProject(samples));
+    // console.log(userLibraries);
     let runLengthMap = poolSameRunLength(poolSameProject(samples));
     let flowcells;
     let processedRunsByBarcodes = [];
     for(let [runLength, projects] of Object.entries(runLengthMap)) {
         flowcells = determineFlowCells(projects, runLength)['Runs'];
+        console.log("determining flow cells", flowcells);
         let remainingProjects = determineFlowCells(projects, runLength)["Remaining"];
+        console.log("remaining", remainingProjects );
         result["Remaining"].push(remainingProjects); // don't fit in run
         for(let run of flowcells) {
             processedRunsByBarcodes.push(splitBarcodes(run));
         }
+        console.log("processed lanes", processedRunsByBarcodes)
+       
     }
     for(let pool of processedRunsByBarcodes) {
         for(let run of pool['Runs']) {

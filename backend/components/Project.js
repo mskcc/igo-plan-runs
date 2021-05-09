@@ -7,26 +7,18 @@ class Project {
         this.samples = samples;
         this.recipe = recipe; // correlates with project, same project = same recipe
         this.requestName = requestName;
-        this.totalReads = totalReads
+        this.totalReads = totalReads;
     }
 
     addSample(sample) {
         this.samples.push(sample);
     }
 
-    addSampleReads() {
-        for (let sample of this.samples) {
-            this.totalReads += parseInt(sample.readsRequested)
-        }
-    }
 
     getProjectReads() { // adds up all reads requested for all samples in project instance
-        let reads = 0;
         for(let sample of this.samples) {
-            this.reads += parseInt(sample.readsRequested);
             this.totalReads += parseInt(sample.readsRequested);
         }
-        return reads;
         
     }
     

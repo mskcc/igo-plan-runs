@@ -59,7 +59,10 @@ function poolSameLibrary(samples) {
     let projects = []
     let projectObjects = [];
     for (let sample of samples) {
+      if(sample.recipe != undefined && !sample.recipe.includes("IDT_Exome")) {
         projects.push(sample.requestId) //push all request ids for samples excluding WES
+      }
+        
       
     }
     let projectsSet = new Set(projects);
@@ -68,7 +71,10 @@ function poolSameLibrary(samples) {
     })
 
     for (let sample of samples) {
-          map[sample.requestId].push(sample);
+      if(sample.recipe != undefined && !sample.recipe.includes("IDT_Exome")) {
+        map[sample.requestId].push(sample);
+      }
+          
       
     }
 
@@ -91,16 +97,17 @@ function poolSameLibrary(samples) {
 
     let count = 0;
 
-    // for(let sample of samples) {
-    //   if(sample.recipe.includes("IDT_Exome")) {
-    //     let sampleObj = new Sample(sample.sampleId, sample.pool, sample.barcodeSeq, sample.recipe, sample.runType, sample.readNum, sample.requestName, sample.requestId, sample.altConcentration, sample.concentrationUnits);
-    //    let projectObj = new Project(sample.requestId, sample.runType, [sampleObj], sample.recipe, sample.requestName);        
+    for(let sample of samples) {
+      if(sample.recipe != undefined && sample.recipe.includes("IDT_Exome")) {
+        let sampleObj = new Sample(sample.sampleId, sample.pool, sample.barcodeSeq, sample.recipe, sample.runType, sample.readNum, sample.requestName, sample.requestId, sample.altConcentration, sample.concentrationUnits);
+       let projectObj = new Project(sample.requestId, sample.runType, [sampleObj], sample.recipe, sample.requestName);        
       
-    //    projectObjects.push(projectObj);
-    //   }
-    // }
+       projectObjects.push(projectObj);
+      }
+    }
+  
     for(let project of projectObjects) {
-      project.addSampleReads();
+      project.getProjectReads();
     }
     return projectObjects;
   }

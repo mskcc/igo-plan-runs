@@ -14,7 +14,7 @@ function groupUserLibraries(projects) {
     for(let project of projects) {
       if(project.isUserLibrary) {
           
-      if(project.totalReads >= capacities['SP'][0] && project.totalReads <= capacities['SP'][1]) {
+      if(project.totalReads <= capacities['SP'][0]) {
         let run = new Run('SP', project.runLength);
         run.totalReads += project.totalReads;
         run.projects.push(project);
@@ -39,9 +39,9 @@ function groupUserLibraries(projects) {
         run.projects.push(project);
         res['Runs'].push(run);
         
-      } else {
-        res['Remaining'].push(project);
       }
+      } else {
+        res["Remaining"].push(project);
       }
     return res;
     }
