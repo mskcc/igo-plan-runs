@@ -6,6 +6,7 @@ import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.css';
 import LoadingOverlay from 'react-loading-overlay';
 import ReactDOM from 'react-dom';
+import sortRowsByProperty from './sortByProperty';
 
 
 
@@ -162,6 +163,7 @@ function HomePage() {
       setFilteredRuns(result.rows);
       
       setColumns(prev => [checkboxColumn, ...result.columns]);
+      // setColumns(result.columns);
 
       //function to sort data according to column header/property
       const arr = [...result.rows]
@@ -178,12 +180,7 @@ function HomePage() {
         return res;
               
             } 
-        // setAltConcentrationRuns(sortRowsByProperty('altConcentration', 'ascending'));
-        //not updating 
-
-        console.log(sortRowsByProperty(arr, "altConcentration", "ascending"));
-            console.log("sampleid", sortRowsByProperty(arr, "altConcentration", "ascending"));
-
+        
       setIsLoading(false);
       
       
@@ -195,37 +192,16 @@ function HomePage() {
     handleRuns();
     
   }, []);
-  console.log('runs', altConcentrationRuns);
   
   
-
-
 
 const handleExport = () => {
   
 exportExcel(filteredRuns, columns);
+setAltConcentrationRuns(sortRowsByProperty(filteredRuns, 'altConcentration', 'ascending'));
 };
 
 
-// setPooledRuns(sortRowsByProperty('pool', "ascending"));
-//       setSampleIdRuns(sortRowsByProperty('sampleId', "ascending"));
-//       setOtherSampleIdRuns(sortRowsByProperty('otherSampleId', "ascending"));
-//       setRecipeRuns(sortRowsByProperty('recipe', "ascending"));
-//       setTumorRuns(sortRowsByProperty('tumor', "ascending"));
-//       setPoolConcentrationRuns(sortRowsByProperty('concentration', "ascending"));
-//       setRequestIdRuns(sortRowsByProperty('requestId', "ascending"));
-//       setRequestNameRuns(sortRowsByProperty('requestName', "ascending"));
-//       setAltConcentrationRuns(sortRowsByProperty('altConcentration', "ascending"));
-//       setConcentrationUnitsRuns(sortRowsByProperty('concentrationUnits', "ascending"));
-//       setVolumeRuns(sortRowsByProperty('volume', "ascending"));
-//       setPlateIdRuns(sortRowsByProperty('plateId', "ascending"));
-//       setWellPosRuns(sortRowsByProperty('wellPos', "ascending"));
-//       setBarcodeSeqRuns(sortRowsByProperty('barcodeSeq', "ascending"));
-//       setBarcodeIdRuns(sortRowsByProperty('barcodeId', "ascending"));
-//       setRunTypeRuns(sortRowsByProperty('runType', "ascending"));
-//       setReadsRequestedRuns(sortRowsByProperty('readNum', "ascending"));
-//       setReadsRemainingRuns(sortRowsByProperty('remainingReads', "ascending"));
-//       setReadsAchievedRuns(sortRowsByProperty('readTotal', "ascending"));
 
   return (
     <div className={classes.container}>
