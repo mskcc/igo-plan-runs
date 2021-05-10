@@ -8,15 +8,13 @@ import LoadingOverlay from 'react-loading-overlay';
 import ReactDOM from 'react-dom';
 import sortRowsByProperty from './sortByProperty';
 
-
-
 const useStyles = makeStyles((theme) => ({
   container: {
     height: '90vh',
     width: '95vw',
     margin: '0 auto',
     marginBottom: '3em',
-    overflow: 'auto'
+    overflow: 'auto',
   },
   toolbar: {
     margin: theme.spacing(2),
@@ -25,16 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function HomePage() {
-
   const classes = useStyles();
   const hotTableComponent = React.createRef();
 
   // let ascendingNode = ReactDOM.findDOMNode(<HotTable />).getElementsByClassName('ascending');
   // let descendingNode = ReactDOM.findDOMNode(<HotTable />).getElementsByClassName('descending');
-  
-  
 
-  
   const [runs, setRuns] = useState({
     runs: [],
   });
@@ -43,87 +37,86 @@ function HomePage() {
   });
 
   const [pooledRuns, setPooledRuns] = useState({
-    pooledRuns : []
-  })
+    pooledRuns: [],
+  });
 
   const [sampleIdRuns, setSampleIdRuns] = useState({
-    sampleIdRuns : []
-  })
-  
-  const [ otherSampleIdRuns, setOtherSampleIdRuns ] = useState({
-    otherSampleIdRuns : []
-  })
+    sampleIdRuns: [],
+  });
+
+  const [otherSampleIdRuns, setOtherSampleIdRuns] = useState({
+    otherSampleIdRuns: [],
+  });
 
   const [recipeRuns, setRecipeRuns] = useState({
-    recipeRuns : []
-  })
+    recipeRuns: [],
+  });
 
-  const [tumor, setTumorRuns ] = useState({
-    tumorRuns : []
-  })
+  const [tumor, setTumorRuns] = useState({
+    tumorRuns: [],
+  });
 
   const [poolConcentrationRuns, setPoolConcentrationRuns] = useState({
-    poolConcentrationRuns : []
-  })
+    poolConcentrationRuns: [],
+  });
 
-  const [requestIdRuns, setRequestIdRuns ] = useState({
-     requestIdRuns : []
-  })
+  const [requestIdRuns, setRequestIdRuns] = useState({
+    requestIdRuns: [],
+  });
 
-  const [requestNameRuns, setRequestNameRuns ] = useState({
-    requestNameRuns : []
-  })
+  const [requestNameRuns, setRequestNameRuns] = useState({
+    requestNameRuns: [],
+  });
 
-  const [altConcentrationRuns, setAltConcentrationRuns ] = useState([])
+  const [altConcentrationRuns, setAltConcentrationRuns] = useState([]);
 
   const [concentrationUnitsRuns, setConcentrationUnitsRuns] = useState({
-    concentrationUnitsRuns : []
-  })
+    concentrationUnitsRuns: [],
+  });
 
   const [volumeRuns, setVolumeRuns] = useState({
-    volumeRuns : []
-  })
+    volumeRuns: [],
+  });
 
   const [plateIdRuns, setPlateIdRuns] = useState({
-    plateIdRuns : []
-  })
-
+    plateIdRuns: [],
+  });
 
   const [wellPosRuns, setWellPosRuns] = useState({
-    wellPosRuns : []
-  })
+    wellPosRuns: [],
+  });
 
   const [barcodeSeqRuns, setBarcodeSeqRuns] = useState({
-    barcodeSeqRuns : []
-  })
+    barcodeSeqRuns: [],
+  });
 
   const [barcodeIdRuns, setBarcodeIdRuns] = useState({
-    barcodeSeqRuns : []
-  })
+    barcodeSeqRuns: [],
+  });
 
   const [runTypeRuns, setRunTypeRuns] = useState({
-    runTypeRuns : []
-  })
+    runTypeRuns: [],
+  });
 
   const [readsRequestedRuns, setReadsRequestedRuns] = useState({
-    readsRequestedRuns : []
-  })
+    readsRequestedRuns: [],
+  });
 
-  const [readsRemainingRuns, setReadsRemainingRuns ] = useState({
-    readsRequestedRuns : []
-  })
+  const [readsRemainingRuns, setReadsRemainingRuns] = useState({
+    readsRequestedRuns: [],
+  });
 
   const [readsAchievedRuns, setReadsAchievedRuns] = useState({
-    readsAchievedRuns : []
-  })
+    readsAchievedRuns: [],
+  });
   const [columns, setColumns] = useState({
     columns: [],
   });
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [sorting, setSorting] = React.useState(true);
-  
+
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     let searchTerm = event.target.value;
@@ -141,67 +134,54 @@ function HomePage() {
     }
   };
 
-  
-
-  
   async function handleRuns() {
     getRuns().then((result) => {
-     
-      result.rows.map(row => {
-        row.readTotal = parseInt(row.readTotal/1000000);
-        row.remainingReads = parseInt(row.remainingReads/1000000);
+      result.rows.map((row) => {
+        row.readTotal = parseInt(row.readTotal / 1000000);
+        row.remainingReads = parseInt(row.remainingReads / 1000000);
         return row;
-      })
+      });
       const rowsLen = result.rows.length;
       const checkboxData = [];
-      for(let i = 0; i  <rowsLen; i++) {
-        checkboxData.push({excluded:true}, {excluded: false});
+      for (let i = 0; i < rowsLen; i++) {
+        checkboxData.push({ excluded: true }, { excluded: false });
       }
 
-      const checkboxColumn = {columnHeader: "Exclude From Planning", data:checkboxData, type: "checkbox"};
+      const checkboxColumn = { columnHeader: 'Exclude From Planning', data: checkboxData, type: 'checkbox' };
       setRuns(result.rows);
       setFilteredRuns(result.rows);
-      
-      setColumns(prev => [checkboxColumn, ...result.columns]);
+
+      setColumns((prev) => [checkboxColumn, ...result.columns]);
       // setColumns(result.columns);
 
       //function to sort data according to column header/property
-      const arr = [...result.rows]
+      const arr = [...result.rows];
       const sortRowsByProperty = (arr, property, direction) => {
-        let res = arr.sort(function(a,b) { 
-              var A = Object.keys(a)[0];
-              var B = Object.keys(b)[0];
-              if (direction === "ascending") {
-                return a[A][property] < b[B][property] ? -1 : 1
-             } else if (direction === "descending") {
-                return a[A][property] < b[B][property] ? 1 : -1
-             }
-              });
+        let res = arr.sort(function (a, b) {
+          var A = Object.keys(a)[0];
+          var B = Object.keys(b)[0];
+          if (direction === 'ascending') {
+            return a[A][property] < b[B][property] ? -1 : 1;
+          } else if (direction === 'descending') {
+            return a[A][property] < b[B][property] ? 1 : -1;
+          }
+        });
         return res;
-              
-            } 
-        
+      };
+
       setIsLoading(false);
-      
-      
     });
   }
 
   useEffect(() => {
     setIsLoading(true);
     handleRuns();
-    
   }, []);
-  
-  
 
-const handleExport = () => {
-  
-exportExcel(filteredRuns, columns);
-setAltConcentrationRuns(sortRowsByProperty(filteredRuns, 'altConcentration', 'ascending'));
-};
-
-
+  const handleExport = () => {
+    exportExcel(filteredRuns, columns);
+    setAltConcentrationRuns(sortRowsByProperty(filteredRuns, 'altConcentration', 'ascending'));
+  };
 
   return (
     <div className={classes.container}>
@@ -212,7 +192,7 @@ setAltConcentrationRuns(sortRowsByProperty(filteredRuns, 'altConcentration', 'as
             Export Excel
           </Button>
         </div>
-       
+
         <HotTable
           ref={hotTableComponent}
           data={filteredRuns}
@@ -227,10 +207,6 @@ setAltConcentrationRuns(sortRowsByProperty(filteredRuns, 'altConcentration', 'as
           stretchH='all'
           height='700'
         />
-        
-        
-
-        
       </LoadingOverlay>
     </div>
   );
