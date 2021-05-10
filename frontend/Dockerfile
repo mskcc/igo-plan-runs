@@ -4,11 +4,9 @@ ADD . /app
 
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json", "./"]
+COPY package.json /app
 
 RUN npm install
-
-RUN npm run build
 
 CMD ["npm", "start"]
 
