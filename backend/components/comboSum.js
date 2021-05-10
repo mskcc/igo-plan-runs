@@ -1,7 +1,7 @@
 const { Project } = require('./Project');
 
 /**
- * find all combinations that sum up to the target within the range (max - min read capacity)
+ * using dp top-down approach, find all combinations that sum up to the target within the range (max - min read capacity)
  * @param  {Array} arr  input array of projects
  * @param  {Number} target  target sum
  * @param  {Number} range  range that sum needs to be within of target
@@ -19,16 +19,16 @@ function sumArrReads(projects) { // sum up the reads in a project
   var combinationSum = function(arr, target, range) {
       let minCapacity = target - range;
       if (sumArrReads(arr) < minCapacity) {
-        return [];
+        return []; // return empty array if sum of reads in array is less than min capacity
       }
       let sel = new Array(arr.length);
       let dp = new Array(arr.length);
       for (let i = 0; i <= target; i++) {
         sel[i] = new Array(target + 1).fill(0);
-        dp[i] = new Array(target + 1).fill(-1);
+        dp[i] = new Array(target + 1).fill(-1); //memoization
       }
 
-      function rec(arr, index, remainingCapacity) {
+      function rec(arr, index, remainingCapacity) { //recursive function 
         if (remainingCapacity < 0) {
           return INF;
         } else if (index >= arr.length) {

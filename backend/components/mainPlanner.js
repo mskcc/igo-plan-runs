@@ -18,14 +18,11 @@ function mainRunPlanner(samples) {
     let processedRunsByBarcodes = [];
     for(let [runLength, projects] of Object.entries(runLengthMap)) {
         flowcells = determineFlowCells(projects, runLength)['Runs'];
-        console.log("determining flow cells", flowcells);
         let remainingProjects = determineFlowCells(projects, runLength)["Remaining"];
-        console.log("remaining", remainingProjects );
         result["Remaining"].push(remainingProjects); // don't fit in run
         for(let run of flowcells) {
             processedRunsByBarcodes.push(splitBarcodes(run));
         }
-        console.log("processed lanes", processedRunsByBarcodes)
        
     }
     for(let pool of processedRunsByBarcodes) {
