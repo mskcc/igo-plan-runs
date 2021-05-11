@@ -136,6 +136,7 @@ function HomePage() {
 
   async function handleRuns() {
     getRuns().then((result) => {
+      console.log(result);
       result.rows.map((row) => {
         row.readTotal = parseInt(row.readTotal / 1000000);
         row.remainingReads = parseInt(row.remainingReads / 1000000);

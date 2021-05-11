@@ -38,7 +38,7 @@ function determineFlowCells(projects, runLength) {
   const runs = { SP: [800, 100], S1: [1800, 200], S2: [3800, 200], S4: [10000, 1000] }; //max capacity, range (max- min capacity of flow cell)
   let priority = ['S4', 'S2', 'S1', 'SP'];
   priority.forEach((p) => {
-    let target = runs[p][0];
+    let target = runs[p][0]; // max capacity of a flowcell
     let range = runs[p][1];
     let allocations = combinationSum(projects, target, range); //find optimal combination that fit within run capacity
     // returns the indices and not the value

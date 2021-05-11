@@ -6,7 +6,7 @@ const ttl = 60 * 60 * 1; // cache for 1 Hour
 const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength, poolSameLibrary, poolSameProject } = require('../components/PoolFunctions');
-const fs = require('fs');
+
 const { Project } = require('../components/Project');
 const { Sample } = require('../components/Sample');
 const { runPlan } = require('../components/runPlanner');
@@ -70,8 +70,6 @@ exports.getRuns = [
       .then((result) => {
         let grid = generateGrid(result.data);
         let data = JSON.stringify(grid);
-
-        fs.writeFileSync('samples.json', data);
 
         return apiResponse.successResponseWithData(res, 'success', {
           rows: grid,

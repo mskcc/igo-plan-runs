@@ -10,24 +10,49 @@ let data = JSON.parse(raw);
 
 function mainRunPlanner(samples) {
   let result = { Runs: [], Lanes: [], Remaining: [] };
-  // let userLibraries = groupUserLibraries(poolSameProject(samples));
-  let runLengthMap = poolSameRunLength(poolSameProject(samples));
+  let allProjects = poolSameProject(samples);
+  let nonUserProjects = [];
+  let userProjects = [];
+  for (let project of allProjects) {
+    if (!project.isUserLibrary()) {
+      nonUserProjects.push(project);
+    } else {
+      userProjects.push(project);
+    }
+  }
+  let userLibraries = groupUserLibraries(userProjects);
+  // console.log('user libraries', userLibraries);
+  let runLengthMap = poolSameRunLength(nonUserProjects);
   let flowcells;
   let processedRunsByBarcodes = [];
   for (let [runLength, projects] of Object.entries(runLengthMap)) {
-    flowcells = determineFlowCells(projects, runLength)['Runs'];
-    let remainingProjects = determineFlowCells(projects, runLength)['Remaining'];
+    let data = determineFlowCells(projects, runLength);
+    flowcells = data['Runs'];
+    let remainingProjects = data['Remaining'];
     result['Remaining'].push(remainingProjects); // don't fit in run
     for (let run of flowcells) {
       processedRunsByBarcodes.push(splitBarcodes(run));
     }
   }
+  for (let run of userLibraries['Runs']) {
+    result['Runs'].push(run);
+  }
+  for (let rem of userLibraries['Remaining']) {
+    result['Remaining'].push(rem);
+  }
   for (let pool of processedRunsByBarcodes) {
     for (let run of pool['Runs']) {
       result['Runs'].push(run);
+    }
+    for (let rem of pool['Remaining']) {
+      result['Remaining'].push(rem);
     }
   }
   return result;
 }
 
-console.log('main', mainRunPlanner(data));
+// console.log('main', mainRunPlanner(data));
+
+module.exports = {
+  mainRunPlanner,
+};

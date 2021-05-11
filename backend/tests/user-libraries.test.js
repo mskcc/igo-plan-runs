@@ -1,4 +1,3 @@
-const assert = require('assert');
 const expect = require('chai').expect;
 
 const { Sample } = require('../components/Sample');
@@ -23,7 +22,14 @@ describe('result of grouping user libraries together', () => {
   project1.getProjectReads();
   project2.getProjectReads();
   project3.getProjectReads();
+  let run1 = new Run('S1', project1.runLength);
+  let run2 = new Run('S1', project2.runLength);
+  run1.addProject(project1);
+  run1.addProject(project3);
+  run1.addTotalReads();
+  run2.addProject(project2);
+  run2.addTotalReads();
   it('returns S1 with user libraries', () => {
-    expect(groupUserLibraries([project1, project2, project3]))['Runs'].to.eql('');
+    expect(groupUserLibraries([project1, project2, project3])['Runs']).to.eql([run1, run2]);
   });
 });

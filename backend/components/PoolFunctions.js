@@ -79,6 +79,7 @@ function poolSameProject(samples) {
             sample.sampleId,
             sample.pool,
             sample.barcodeSeq,
+            sample.barcodeId,
             sample.recipe,
             sample.runType,
             sample.readNum,
@@ -92,14 +93,13 @@ function poolSameProject(samples) {
     }
   }
 
-  let count = 0;
-
   for (let sample of samples) {
     if (sample.recipe != undefined && sample.recipe.includes('IDT_Exome')) {
       let sampleObj = new Sample(
         sample.sampleId,
         sample.pool,
         sample.barcodeSeq,
+        sample.barcodeId,
         sample.recipe,
         sample.runType,
         sample.readNum,

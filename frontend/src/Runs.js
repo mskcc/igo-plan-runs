@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getRuns } from './services/services';
+import { getPooledRuns } from './services/services';
 import { exportExcel } from './util/excel';
 import { makeStyles, TextField, Button } from '@material-ui/core';
 import { HotTable } from '@handsontable/react';
@@ -58,22 +58,17 @@ function RunPage() {
     exportExcel(filteredRuns, columns);
   };
   async function handleRuns() {
-    getRuns().then((result) => {
+    getPooledRuns().then((result) => {
+      console.log(result);
       result.rows.map((row) => {
         row.readTotal = parseInt(row.readTotal / 1000000);
         row.remainingReads = parseInt(row.remainingReads / 1000000);
         return row;
       });
-      const rowsLen = result.rows.length;
-      const checkboxData = [];
-      for (let i = 0; i < rowsLen; i++) {
-        checkboxData.push({ excluded: true }, { excluded: false });
-      }
 
-      const checkboxColumn = { columnHeader: 'Exclude From Planning', data: checkboxData, type: 'checkbox' };
       setRuns(result.rows);
       setFilteredRuns(result.rows);
-      setColumns((prev) => [checkboxColumn, ...result.columns]);
+      setColumns(result.columns);
 
       setIsLoading(false);
     });
