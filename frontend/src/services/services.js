@@ -33,3 +33,21 @@ export function getRuns() {
       console.error('Unable to get Get Runs: ' + error.message);
     });
 }
+
+export function getPooledRuns() {
+  return axios
+    .get(`${BACKEND}/api/pools/pools`)
+    .then(parseResp)
+    .catch((error) => {
+      console.log('Unable to get pooled runs' + error.message);
+    });
+}
+
+export function getRemaining() {
+  return axios
+    .get(`${BACKEND}/api/rem/rem`)
+    .then(parseResp)
+    .catch((error) => {
+      console.log('Unable to get remaining samples' + error.message);
+    });
+}
