@@ -21,6 +21,12 @@ class Lane {
     }
   }
 
+  getTotalReads() {
+    for (let sample of this.samples) {
+      this.totalLaneReads += sample.readsRequested;
+    }
+  }
+
   getCapacity() {
     return this.readCapacity[this.type];
   }

@@ -17,14 +17,16 @@ class Sample {
     this.sampleId = sampleId;
     this.pool = pool;
     this.barcodeSeq = barcodeSeq; // should be an array bc captured pools have arrays of barcode seqs
-    this.barcodeId = barcodeId; 
-    this.recipe = recipe; 
+    this.barcodeId = barcodeId;
+    this.recipe = recipe;
     this.runLength = runLength; // read length
     this.readsRequested = readsRequested;
     this.requestName = requestName; //requestName
     this.requestId = requestId; // project
     this.sampleConcentration = sampleConcentration;
     this.concentrationUnit = concentrationUnit;
+    this.barcodeCollision = false;
+    this.barcodeList = [];
   }
 
   poolByReadLength(run) {

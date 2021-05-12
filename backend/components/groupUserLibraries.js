@@ -10,12 +10,12 @@ const { Project } = require('./Project');
 const { determineFlowCells } = require('./runPlanner');
 
 function groupUserLibraries(projects) {
-  let result = { Runs: [], Lanes: [], Remaining: [] };
+  let result = { Runs: [], Lanes: [], rem: [] };
   let capacities = { SP: [700, 800], S1: [1600, 1800], S2: [3600, 3800], S4: [9000, 10000] };
   let totalReads = 0;
   let map = {};
   let runLengths = [];
-  let remaining;
+  let rem;
   for (let project of projects) {
     runLengths.push(project.runLength);
   }
@@ -32,20 +32,21 @@ function groupUserLibraries(projects) {
       result['Runs'].push(run);
       run.addTotalReads();
     }
-    remaining = determineFlowCells(project, runLength)['Remaining'];
+    rem = determineFlowCells(project, runLength)['Remaining'];
   }
-
-  for (let project of remaining) {
-    let runLength = project.runLength;
-    if (totalReads <= capacities['SP'][0]) {
-      let run = new Run('SP', runLength);
-      run.addProject(project);
-      run.addTotalReads();
-      result['Runs'].push(run);
+  if (Array.isArray(rem)) {
+    for (let project of rem) {
+      let runLength = project.runLength;
+      if (totalReads <= capacities['SP'][0]) {
+        let run = new Run('SP', runLength);
+        run.addProject(project);
+        run.addTotalReads();
+        result['Runs'].push(run);
+      }
     }
   }
 
-  // let res = { Runs: [], Remaining: [] };
+  // let res = { Runs: [], rem: [] };
   // for (let project of projects) {
   //   if (project.isUserLibrary) {
   //     if (project.totalReads <= capacities['SP'][0]) {
@@ -70,7 +71,7 @@ function groupUserLibraries(projects) {
   //       res['Runs'].push(run);
   //     }
   //   } else {
-  //     res['Remaining'].push(project);
+  //     res['rem'].push(project);
   //   }
   // }
   return result;

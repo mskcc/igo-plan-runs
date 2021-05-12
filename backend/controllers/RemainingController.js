@@ -3,13 +3,13 @@ const apiResponse = require('../helpers/apiResponse');
 const { getRuns } = require('../services/services');
 const { logger } = require('../helpers/winston');
 const { mainRunPlanner } = require('../components/mainPlanner');
+
 const fs = require('fs');
 
 let raw = fs.readFileSync('./samples.json');
 let data = JSON.parse(raw);
+
 const columns = [
-  { columnHeader: 'Run Id', data: 'id', editor: false },
-  { columnHeader: 'Run Type', data: 'type', editor: false },
   { columnHeader: 'Run Length', data: 'runType', editor: false },
   { columnHeader: 'Pool', data: 'pool', editor: false },
   { columnHeader: 'Sample ID', data: 'sampleId', editor: false },
@@ -83,7 +83,7 @@ generateGrid = (data) => {
   return data;
 };
 
-exports.getPooledRuns = [
+exports.getRemaining = [
   // authenticateRequest,
   function (req, res) {
     logger.log('info', 'Retrieving random quote');
@@ -93,35 +93,28 @@ exports.getPooledRuns = [
 
     getRuns()
       .then((result) => {
-        let pooledData = [];
-        // let resultRuns = mainRunPlanner(generateGrid(result.data))['Runs'];
-        let resultRuns = mainRunPlanner(generateGrid(data))['Runs'];
-        let id = 0;
-        for (let run of resultRuns) {
-          id += 1;
-          for (let project of run.projects) {
-            for (let sample of project.samples) {
-              let sampleObj = {};
-              sampleObj['id'] = id;
-              sampleObj['type'] = run.type;
-              sampleObj['sampleId'] = sample.sampleId;
-              sampleObj['pool'] = sample.pool;
-              sampleObj['barcodeSeq'] = sample.barcodeSeq;
-              sampleObj['barcodeId'] = sample.barcodeId;
-              sampleObj['recipe'] = sample.recipe;
-              sampleObj['runType'] = sample.runLength;
-              sampleObj['readNum'] = sample.readsRequested;
-              sampleObj['requestName'] = sample.requestName;
-              sampleObj['requestId'] = sample.requestId;
-              // sampleObj['altConcentration'] = sample.sampleConcentration;
-              // sampleObj['concentrationUnits'] = sample.concentrationUnits;
-              pooledData.push(sampleObj);
-            }
-          }
+        let remData = [];
+        // let remaining = mainRunPlanner(generateGrid(result.data))['Remaining'];
+        let remaining = mainRunPlanner(generateGrid(data))['Remaining'];
+        for (let sample of remaining) {
+          let sampleObj = {};
+          sampleObj['sampleId'] = sample.sampleId;
+          sampleObj['pool'] = sample.pool;
+          sampleObj['barcodeSeq'] = sample.barcodeSeq;
+          sampleObj['barcodeId'] = sample.barcodeId;
+          sampleObj['recipe'] = sample.recipe;
+          sampleObj['runType'] = sample.runLength;
+          sampleObj['readNum'] = sample.readsRequested;
+          sampleObj['requestName'] = sample.requestName;
+          sampleObj['requestId'] = sample.requestId;
+          // sampleObj['altConcentration'] = sample.sampleConcentration;
+          // sampleObj['concentrationUnits'] = sample.concentrationUnits;
+          remData.push(sampleObj);
         }
-        console.log('pooledData', pooledData);
+
+        console.log('remData', remData);
         return apiResponse.successResponseWithData(res, 'success', {
-          rows: pooledData,
+          rows: remData,
           columns: columns,
         });
       })

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPooledRuns } from './services/services';
+import { getPooledRuns, getRemaining } from './services/services';
 import { exportExcel } from './util/excel';
 import { makeStyles, TextField, Button } from '@material-ui/core';
 import { HotTable } from '@handsontable/react';
@@ -29,8 +29,18 @@ function RunPage() {
   const [filteredRuns, setFilteredRuns] = useState({
     filteredRuns: [],
   });
-  const [columns, setColumns] = useState({
+
+   
+  const [runColumns, setRunColumns] = useState({
     columns: [],
+  });
+
+  const [remColumns, setRemColumns] = useState({
+    columns: [],
+  });
+
+  const [remSamples, setRemSamples] = useState({
+    remSamples: [],
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -55,11 +65,10 @@ function RunPage() {
   };
 
   const handleExport = () => {
-    exportExcel(filteredRuns, columns);
+    exportExcel(filteredRuns, runColumns);
   };
   async function handleRuns() {
     getPooledRuns().then((result) => {
-      console.log(result);
       result.rows.map((row) => {
         row.readTotal = parseInt(row.readTotal / 1000000);
         row.remainingReads = parseInt(row.remainingReads / 1000000);
@@ -68,8 +77,16 @@ function RunPage() {
 
       setRuns(result.rows);
       setFilteredRuns(result.rows);
-      setColumns(result.columns);
+      setRunColumns(result.columns);
 
+      setIsLoading(false);
+    });
+  }
+
+  async function handleRemSamples() {
+    getRemaining().then((result) => {
+      setRemSamples(result.rows);
+      setRemColumns(result.columns);
       setIsLoading(false);
     });
   }
@@ -77,6 +94,7 @@ function RunPage() {
   useEffect(() => {
     setIsLoading(true);
     handleRuns();
+    handleRemSamples();
   }, []);
 
   return (
@@ -94,8 +112,8 @@ function RunPage() {
               ref={hotTableComponent}
               data={filteredRuns}
               search='true'
-              colHeaders={columns ? Object.keys(columns).map((el) => columns[el].columnHeader) : ''}
-              columns={columns}
+              colHeaders={runColumns ? Object.keys(runColumns).map((el) => runColumns[el].columnHeader) : ''}
+              columns={runColumns}
               filters='true'
               columnSorting={sorting}
               manualColumnResize={true}
@@ -116,8 +134,8 @@ function RunPage() {
               ref={hotTableComponent}
               data={filteredRuns}
               search='true'
-              colHeaders={columns ? Object.keys(columns).map((el) => columns[el].columnHeader) : ''}
-              columns={columns}
+              colHeaders={runColumns ? Object.keys(runColumns).map((el) => runColumns[el].columnHeader) : ''}
+              columns={runColumns}
               filters='true'
               columnSorting={sorting}
               manualColumnResize={true}
@@ -136,12 +154,12 @@ function RunPage() {
             </div>
             <HotTable
               ref={hotTableComponent}
-              data={filteredRuns}
+              data={remSamples}
               search='true'
-              colHeaders={columns ? Object.keys(columns).map((el) => columns[el].columnHeader) : ''}
-              columns={columns}
+              colHeaders={remColumns ? Object.keys(remColumns).map((el) => remColumns[el].columnHeader) : ''}
+              columns={remColumns}
               filters='true'
-              columnSorting={sorting}
+              // columnSorting={sorting}
               manualColumnResize={true}
               licenseKey='non-commercial-and-evaluation'
               rowHeaders={true}

@@ -42,3 +42,12 @@ export function getPooledRuns() {
       console.log('Unable to get pooled runs' + error.message);
     });
 }
+
+export function getRemaining() {
+  return axios
+    .get(`${BACKEND}/api/rem/rem`)
+    .then(parseResp)
+    .catch((error) => {
+      console.log('Unable to get remaining samples' + error.message);
+    });
+}

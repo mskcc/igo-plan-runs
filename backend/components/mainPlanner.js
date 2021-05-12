@@ -29,7 +29,12 @@ function mainRunPlanner(samples) {
     let data = determineFlowCells(projects, runLength);
     flowcells = data['Runs'];
     let remainingProjects = data['Remaining'];
-    result['Remaining'].push(remainingProjects); // don't fit in run
+    for (let project of remainingProjects) {
+      for (let sample of project.samples) {
+        result['Remaining'].push(sample);
+      }
+    }
+    // result['Remaining'].push(remainingProjects); // don't fit in run
     for (let run of flowcells) {
       processedRunsByBarcodes.push(splitBarcodes(run));
     }
@@ -37,9 +42,7 @@ function mainRunPlanner(samples) {
   for (let run of userLibraries['Runs']) {
     result['Runs'].push(run);
   }
-  for (let rem of userLibraries['Remaining']) {
-    result['Remaining'].push(rem);
-  }
+
   for (let pool of processedRunsByBarcodes) {
     for (let run of pool['Runs']) {
       result['Runs'].push(run);
@@ -51,7 +54,7 @@ function mainRunPlanner(samples) {
   return result;
 }
 
-// console.log('main', mainRunPlanner(data));
+console.log('main', mainRunPlanner(data));
 
 module.exports = {
   mainRunPlanner,
