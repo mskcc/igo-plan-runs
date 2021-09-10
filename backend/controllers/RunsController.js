@@ -15,7 +15,7 @@ const columns = [
   { columnHeader: 'Tumor/Normal', data: 'tumor', editor: false },
   { columnHeader: 'Pool Conc.', data: 'concentration', editor: false, type: 'numeric' },
   { columnHeader: 'Request ID', data: 'requestId', editor: false },
-  { columnHeader: 'Request Name', data: 'requestName', editor:false},
+  { columnHeader: 'Request Name', data: 'requestName', editor: false },
   // { columnHeader: 'Status', data: 'status', editor:false },
   // { columnHeader: 'Awaiting Samples', data: 'awaitingSamples', editor:false },
   // { columnHeader: 'Sequencer', data: 'sequencer', editor:false },
@@ -49,7 +49,18 @@ const columns = [
 ];
 
 
+exports.plan = [
+  function(req, res){
+    // Get the request parameters -> samples
+    const samples=req.query.samples
 
+    // Process/Plan them
+
+    // Return result
+    return apiResponse.successResponseWithData(res, 'success', samples)
+  }
+
+]
 
 
 /**
@@ -60,11 +71,10 @@ const columns = [
 exports.getRuns = [
   // authenticateRequest,
   function (req, res) {
-    logger.log('info', 'Retrieving random quote');
     let key = 'RUNS';
     let retrievalFunction = () => getRuns();
 
-    
+
     getRuns()
       .then((result) => {
         let grid = generateGrid(result.data);
