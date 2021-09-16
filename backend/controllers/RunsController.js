@@ -6,6 +6,8 @@ const ttl = 60 * 60 * 1; // cache for 1 Hour
 const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength } = require('./PoolFunctions');
+const { getCollisionGroup, createSampleList, createSampleObject, groupSampleByRunType } = require('../helpers/planRunsUtil');
+// const result = require('./result');
 
 const columns = [
   { columnHeader: 'Pool', data: 'pool', editor: false },
@@ -51,15 +53,26 @@ const columns = [
 
 exports.plan = [
   function(req, res){
-    // Get the request parameters -> samples
-    const samples=req.query.samples
 
-    // Process/Plan them
-
-    // Return result
-    return apiResponse.successResponseWithData(res, 'success', samples)
+    getRuns()
+    .then((result)=>{
+      var result1 = new Map();
+      var sampleListTest = [];
+      for(let i = 0; i < result.data.length; i++){
+          sampleListTest.push(createSampleObject(result.data[i]));
+      }
+  
+      var sampleList = createSampleList(sampleListTest);
+  
+      var runTypeGroup = groupSampleByRunType(sampleList);
+      for (const key of runTypeGroup.keys()){
+          result1.set(key, getCollisionGroup(runTypeGroup.get(key)));
+      }
+  
+      // Return result
+      return apiResponse.successResponseWithData(res, 'success', Object.fromEntries(result1));
+    });
   }
-
 ]
 
 
@@ -74,6 +87,8 @@ exports.getRuns = [
     let key = 'RUNS';
     let retrievalFunction = () => getRuns();
 
+
+    logger.info('info', 'doing other work');
 
     getRuns()
       .then((result) => {
