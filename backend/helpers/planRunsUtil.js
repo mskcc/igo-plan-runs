@@ -1,14 +1,25 @@
 const { logger } = require('./winston');
-const {sample, pooledSample} = require('./classes/Sample');
+const {Sample, PooledSample} = require('./classes/Sample');
 
-//function to create sample object from testcase file(LIMS request)
+/**
+ * Create Sample object from LIMS information
+ * 
+ * @param {Object} sampleMap Object contains sample information from LIMS with key value pair format
+ * @returns  Sample object 
+ */
 exports.createSampleObject = function(sampleMap) {
-    var sampleObject = new sample(sampleMap['pool'], sampleMap['sampleId'],sampleMap['recipe'],sampleMap['requestId'],sampleMap['requestName'],
+    var sampleObject = new Sample(sampleMap['pool'], sampleMap['sampleId'],sampleMap['recipe'],sampleMap['requestId'],sampleMap['requestName'],
     sampleMap['altConcentration'],sampleMap['concentrationUnits'],sampleMap['volume'],sampleMap['barcodeSeq'],sampleMap['runType'],
     sampleMap['readNum'],sampleMap['remainingReads']);
     return sampleObject;
 }
-//function to create sampleList by merging pooledsamples from sample object list
+
+/**
+ * create sampleList by merging pooledsamples from sample object list
+ * 
+ * @param {Array} sampleObjectList Sample object list
+ * @returns sampleList that merged samples with poolID into PooledSample with the Sample object first and PooledSample in the last
+ */
 exports.createSampleList = function(sampleObjectList){
     var sampleList = [];
     const samplePoolList = new Map();
@@ -26,12 +37,18 @@ exports.createSampleList = function(sampleObjectList){
         }
     }
     for (const value of samplePoolList.values()){
-        var pooledSampleObject = new pooledSample(value);
+        var pooledSampleObject = new PooledSample(value);
         sampleList.push(pooledSampleObject);
     }   
     return(sampleList);
 }
-//group samples by run type and return a map
+
+/**
+ * group samples by run type and return a map with runLength as key and sample list as value
+ * 
+ * @param {Array} sampleObjectList array of Sample/PooledSample Objects
+ * @returns a map with runLength as key and sample list as value
+ */
 exports.groupSampleByRunType = function(sampleObjectList){
     const runTypeList = new Map();
     for (let i = 0; i < sampleObjectList.length; i++){
@@ -44,7 +61,15 @@ exports.groupSampleByRunType = function(sampleObjectList){
     return(runTypeList);
 }
 
-// function for barcode checking between two samples
+/**
+ * barcode collison checking between two barcodes by given length and number of mismatch allowed
+ * 
+ * @param {string} seq1 barcode
+ * @param {string} seq2 barcode
+ * @param {number} length length that want to perform the collison checking
+ * @param {number} numOfMismatch number of mismatch allowed
+ * @returns true if collision happens under situation of certain number of mismatch allowed
+ */
 function barcodeCollision(seq1, seq2, length, numOfMismatch){
     var seq1_frag = seq1.substr(0,length);
     var seq2_frag = seq2.substr(0,length);
@@ -76,7 +101,14 @@ function barcodeCollision(seq1, seq2, length, numOfMismatch){
 
 }
 
-//function for list barcode checking
+/**
+ * barcode collison checking between two list of barcodes by given length and number of mismatch allowed
+ * 
+ * @param {Array or string} seqList1 list of barcode or individual barcode
+ * @param {Array or string} seqList2 list of barcode or individual barcode
+ * @param {number} numOfMismatch number of mismatch allowed
+ * @returns true if collision happens under situation of certain number of mismatch allowed
+ */
 function listBarcodeCollision(seqList1, seqList2, numOfMismatch){
     //merge single barcode/list barcode into one array
     var emptyList = [];
@@ -100,7 +132,12 @@ function listBarcodeCollision(seqList1, seqList2, numOfMismatch){
     return false;
 }
 
-//function to calculates total reads from a list of samples
+/**
+ * calculate total reads from a list of samples
+ * 
+ * @param {Array} listOfSamples array of Sample/PooledSample objects
+ * @returns total reads from the list of samples/PooledSamples
+ */
 function getTotalReads(listOfSamples) {
     var totalReadsNum = 0;
     for(let i = 0; i < listOfSamples.length; i++){
@@ -109,8 +146,14 @@ function getTotalReads(listOfSamples) {
     return totalReadsNum;
 }
 
-//function for checking barcode of pools that contain pool normal(not tested yet)
-//return false if collison caused by pool normal
+/**
+ * Check barcode of pools that contain pool normal(not tested yet)
+ * 
+ * @param {PooledSample} pool1 PooledSample object
+ * @param {PooledSample} pool2 PooledSample object
+ * @param {Number} numOfMismatch number of mismatch allowed
+ * @returns true if the collision happened cause by non-poolnormal sample within the pool
+ */
 function checkPoolNormal(pool1, pool2, numOfMismatch){
     var minLength = 30;
     for (let i = 0; i < pool1.barcodeSeq.length; i++){
@@ -132,18 +175,30 @@ function checkPoolNormal(pool1, pool2, numOfMismatch){
     }
     return false;
 }
-//function for checking whether barcode collison happens between two samples
+
+/**
+ * Check whether barcode collison happens between two samples
+ * 
+ * @param {Sample} sample1 Sample/PooledSample object
+ * @param {Sample} sample2 Sample/PooledSample object
+ * @param {Number} numOfMismatch number of mismatch allowed
+ * @returns true for collision happens
+ */
 function sampleBarcodeCollision(sample1, sample2, numOfMismatch){
     if (sample1.poolID !== undefined && sample2.poolID !== undefined 
-    && sample1.containNormal == true && sample2.containNormal == true){
+    && sample1.containNormal && sample2.containNormal){
             return checkPoolNormal(sample1, sample2, numOfMismatch);
     }else{
         return listBarcodeCollision(sample1.barcodeSeq, sample2.barcodeSeq, numOfMismatch);
     }
 }
 
-
-// function for seperating samples into different groups based on barcode
+/**
+ * seperating samples into different groups based on barcode
+ * 
+ * @param {Array} sampleList array of Sample Objects
+ * @returns Array of barcode groups, the last item of the array is the samples that can go with any other samples
+ */
 exports.getCollisionGroup = function(sampleList){
     var freeList = sampleList.concat();
     var groupList = [];

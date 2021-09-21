@@ -51,26 +51,25 @@ const columns = [
 ];
 
 
+/**
+ * Returns a map that has runLength as key and samples grouped by barcode as value. The last group of samples for each runLength is 
+ *     the group of sample that does have barcode collision with any other samples in the same runLength group.
+ */
 exports.plan = [
   function(req, res){
 
     getRuns()
-    .then((result)=>{
-      var result1 = new Map();
-      var sampleListTest = [];
-      for(let i = 0; i < result.data.length; i++){
-          sampleListTest.push(createSampleObject(result.data[i]));
-      }
-  
-      var sampleList = createSampleList(sampleListTest);
-  
+    .then((inforFromLIMS)=>{
+      var runTypeResult = new Map();
+      var sampleObjectList = [];
+      inforFromLIMS.data.forEach(element => sampleObjectList.push(createSampleObject(element)));
+      var sampleList = createSampleList(sampleObjectList);
       var runTypeGroup = groupSampleByRunType(sampleList);
       for (const key of runTypeGroup.keys()){
-          result1.set(key, getCollisionGroup(runTypeGroup.get(key)));
+        runTypeResult.set(key, getCollisionGroup(runTypeGroup.get(key)));
       }
-  
-      // Return result
-      return apiResponse.successResponseWithData(res, 'success', Object.fromEntries(result1));
+      // Return barcode grouping result. Object.fromEntries(runTypeResult) is used b/c Map can't be serialized
+      return apiResponse.successResponseWithData(res, 'success', Object.fromEntries(runTypeResult));
     });
   }
 ]
@@ -86,9 +85,6 @@ exports.getRuns = [
   function (req, res) {
     let key = 'RUNS';
     let retrievalFunction = () => getRuns();
-
-
-    logger.info('info', 'doing other work');
 
     getRuns()
       .then((result) => {
