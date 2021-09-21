@@ -197,7 +197,7 @@ function sampleBarcodeCollision(sample1, sample2, numOfMismatch){
  * seperating samples into different groups based on barcode
  * 
  * @param {Array} sampleList array of Sample Objects
- * @returns Array of barcode groups, the last item of the array is the samples that can go with any other samples
+ * @returns Array of Sample/PooledSample object groups, the last item of the array is the samples that can go with any other samples
  */
 exports.getCollisionGroup = function(sampleList){
     var freeList = sampleList.concat();

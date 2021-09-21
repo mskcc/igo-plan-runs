@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import Header from './Header';
 import Table from './Table';
+import Plan from './Plan';
+import { Tab } from '@material-ui/core';
 
 const theme = createMuiTheme({
   typography: {
@@ -31,8 +33,20 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <Router>
         <Header />
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/plan">Plan</Link>
+            </li>
+          </ul>
+        </nav>
+
         <Switch>
-          <Route path='/' component={Table} />
+          <Route exact path="/" component={Table} />
+          <Route exact path="/plan" component={Plan} />
         </Switch>
       </Router>
     </MuiThemeProvider>

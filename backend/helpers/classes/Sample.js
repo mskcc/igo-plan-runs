@@ -35,6 +35,7 @@ class Sample{
         this.runLength = runLength;
         this.readsRequest = Number(readsRequest);
         this.readsRemaining = Number(readsRemaining);
+        this.groupID = 0;
     }
 
 }
@@ -58,7 +59,8 @@ class PooledSample{
         this.recipe = representativeSample.recipe;
         this.isUser = representativeSample.isUser;
         this.runLength = representativeSample.runLength;
-    }
+        this.groupID = 0;
+        }
     /**
      * Calculate totalreads from an array of Sample objects which is the PooledSample class input
      * 

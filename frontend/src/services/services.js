@@ -33,3 +33,12 @@ export function getRuns() {
       console.error('Unable to get Get Runs: ' + error.message);
     });
 }
+
+export function plan() {
+  return axios
+    .get(`${BACKEND}/api/runs/plan`)
+    .then(parseResp)
+    .catch((error) => {
+      console.error('Unable to get Get Plans: ' + error.message);
+    });
+}

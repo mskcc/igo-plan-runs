@@ -50,6 +50,16 @@ const columns = [
   // { columnHeader: 'Micronic Barcode', data: 'micronicBarcode', editor:false },
 ];
 
+const groupColumn = [
+  { columnHeader: 'Group ID', data: 'groupID', editor: false },
+  { columnHeader: 'Pool', data: 'poolID', editor: false },
+  { columnHeader: 'Sample ID', data: 'sampleID', editor: false },
+  { columnHeader: 'Recipe', data: 'recipe', editor: false },
+  { columnHeader: 'Barcode Sequence', data: 'barcodeSeq', editor: false },
+  { columnHeader: 'Run Length', data: 'runLength', editor: false },
+  { columnHeader: 'Reads Requested', data: 'readsRequest', editor: false },
+
+];
 
 /**
  * Returns a map that has runLength as key and samples grouped by barcode as value. The last group of samples for each runLength is 
@@ -68,8 +78,21 @@ exports.plan = [
       for (const key of runTypeGroup.keys()){
         runTypeResult.set(key, getCollisionGroup(runTypeGroup.get(key)));
       }
-      // Return barcode grouping result. Object.fromEntries(runTypeResult) is used b/c Map can't be serialized
-      return apiResponse.successResponseWithData(res, 'success', Object.fromEntries(runTypeResult));
+      var runTypeResultList = [];
+      for (const runLengthGroup of runTypeResult.values()){
+        runLengthGroup.forEach((sampleList, index) => { 
+          sampleList.forEach((element) => {
+            element.groupID = index + 1;
+            runTypeResultList.push(element);
+          }) 
+        });
+      }
+
+      // Return barcode grouping result as one list and groupColumn for display use
+      return apiResponse.successResponseWithData(res, 'success', {
+        rows: runTypeResultList,
+        columns: groupColumn,
+      });
     });
   }
 ]
