@@ -1,5 +1,6 @@
 import React from 'react';
-import { Avatar, AppBar, Toolbar, Typography, makeStyles } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
+import { Avatar, AppBar, Toolbar, Button, Typography, makeStyles } from '@material-ui/core';
 
 import logo from './logo.png';
 
@@ -14,6 +15,21 @@ function Header() {
         <Typography color='inherit' variant='h6' className={classes.title}>
           IGO Run Planner
         </Typography>
+
+        <Button>
+          <NavLink to='/' className={'mskcc-white nav-inactive'}>
+            <Typography color='inherit' variant='h6'>
+                Home
+            </Typography>                  
+          </NavLink>
+        </Button>
+        <Button>
+          <NavLink to='/Plan' className={'mskcc-white nav-inactive'}>
+            <Typography color='inherit' variant='h6'>
+              Plan
+            </Typography>
+          </NavLink>
+        </Button>
       </Toolbar>
     </AppBar>
   );
