@@ -70,7 +70,7 @@ function HomePage() {
         row.readTotal = parseInt(row.readTotal/1000000);
         row.remainingReads = parseInt(row.remainingReads/1000000);
         return row;
-      })
+      });
       setRuns(result.rows);
       setFilteredRuns(result.rows);
       setColumns(result.columns);
@@ -78,7 +78,7 @@ function HomePage() {
     })
     .catch(error => {
       setIsLoading(false);
-      alert(error.message)
+      alert(error.message);
     });
   }
 
