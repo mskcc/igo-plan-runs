@@ -147,7 +147,7 @@ function getTotalReads(listOfSamples) {
 }
 
 /**
- * Check barcode of pools that contain pool normal(not tested yet)
+ * Check barcode of pools that contain pool normal
  * 
  * @param {PooledSample} pool1 PooledSample object
  * @param {PooledSample} pool2 PooledSample object
@@ -186,7 +186,7 @@ function checkPoolNormal(pool1, pool2, numOfMismatch){
  */
 function sampleBarcodeCollision(sample1, sample2, numOfMismatch){
     if (sample1.poolID !== undefined && sample2.poolID !== undefined 
-    && sample1.containNormal && sample2.containNormal){
+    && sample1.containsAPooledNormal && sample2.containsAPooledNormal){
             return checkPoolNormal(sample1, sample2, numOfMismatch);
     }else{
         return listBarcodeCollision(sample1.barcodeSeq, sample2.barcodeSeq, numOfMismatch);

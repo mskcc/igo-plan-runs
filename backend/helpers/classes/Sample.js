@@ -18,12 +18,12 @@ const { logger } = require('../winston');
  * 
  */
 class Sample{
-    constructor(poolID, sampleID, recipe, requestID, RequestName, sampleConc, units, volume, barcodeSeq, runLength, readsRequest, readsRemaining){
+    constructor(poolID, sampleID, recipe, requestID, requestName, sampleConc, units, volume, barcodeSeq, runLength, readsRequest, readsRemaining){
         this.poolID = poolID;
         this.sampleID = sampleID;
         this.recipe = recipe;
         this.requestID = requestID;
-        if(RequestName.includes("Investigator Prepared") ){
+        if(requestName.includes("Investigator Prepared") ){
             this.isUser = true;
         }else{
             this.isUser = false;
@@ -50,7 +50,7 @@ class Sample{
 class PooledSample{
     constructor(listOfSamples){ 
         this.readsRequest = this.getTotalReads(listOfSamples);
-        this.containNormal = this.ifContainNormal(listOfSamples);
+        this.containsAPooledNormal = this.checkForPooledNormals(listOfSamples);
         this.barcodeSeq = this.createBarcodeList(listOfSamples);
 
         const representativeSample = listOfSamples.filter(this.filterSample)[0];
@@ -82,7 +82,7 @@ class PooledSample{
      * @returns {boolean} whether the pool contains the poolednormal
      * 
      */
-    ifContainNormal(listOfSamples){
+     checkForPooledNormals(listOfSamples){
         let contain = false;
         for(let i = 0; i < listOfSamples.length; i++){
             if (listOfSamples[i].sampleID.includes("NORMAL")){
