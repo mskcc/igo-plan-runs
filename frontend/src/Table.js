@@ -61,8 +61,10 @@ function HomePage() {
   const handleExport = () => {
     exportExcel(filteredRuns, columns);
   };
-  async function handleRuns() {
-    getRuns().then((result) => {
+
+  async function handleRuns(refresh) {
+    setIsLoading(true);
+    getRuns(refresh).then((result) => {
      
       result.rows.map(row => {
         row.readTotal = parseInt(row.readTotal/1000000);
@@ -73,12 +75,15 @@ function HomePage() {
       setFilteredRuns(result.rows);
       setColumns(result.columns);
       setIsLoading(false);
+    })
+    .catch(error => {
+      setIsLoading(false);
+      alert(error.message)
     });
   }
 
   useEffect(() => {
-    setIsLoading(true);
-    handleRuns();
+    handleRuns(false);
   }, []);
  
   return (
@@ -88,6 +93,9 @@ function HomePage() {
           <TextField id='search' label='Search' variant='outlined' value={searchTerm} onChange={handleChange} />
           <Button id='gridExport' onClick={handleExport} color='primary' variant='contained' type='submit'>
             Export Excel
+          </Button>
+          <Button id='gridExport' onClick={() => handleRuns(true)} color='primary' variant='contained' type='submit'>
+            Refresh
           </Button>
         </div>
         <HotTable

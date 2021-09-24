@@ -123,3 +123,7 @@ code {
 .mskcc-white {
 	color: white;
 }
+
+.nav-inactive {
+	text-decoration: none;
+}

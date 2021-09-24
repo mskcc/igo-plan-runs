@@ -25,9 +25,9 @@ const parseResp = (resp) => {
   return contents;
 };
 
-export function getRuns() {
+export function getRuns(refresh) {
   return axios
-    .get(`${BACKEND}/api/runs/runs`)
+    .get(`${BACKEND}/api/runs/runs?refresh=${refresh}`)
     .then(parseResp)
     .catch((error) => {
       console.error('Unable to get Get Runs: ' + error.message);

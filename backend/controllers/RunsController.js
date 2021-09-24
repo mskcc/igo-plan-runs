@@ -2,7 +2,7 @@ const apiResponse = require('../helpers/apiResponse');
 // const { authenticateRequest } = require('../middlewares/jwt-cookie');
 const { getRuns } = require('../services/services');
 const Cache = require('../helpers/cache');
-const ttl = 60 * 60 * 1; // cache for 1 Hour
+const ttl = 60 * 15 * 1; // cache for 15 min
 const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength } = require('./PoolFunctions');
@@ -67,8 +67,10 @@ const groupColumn = [
  */
 exports.plan = [
   function(req, res){
+    let key = 'RUNS';
+    let retrievalFunction = () => getRuns();
 
-    getRuns()
+    cache.get(key, retrievalFunction)
     .then((inforFromLIMS)=>{
       var runTypeResult = new Map();
       var sampleObjectList = [];
@@ -106,10 +108,13 @@ exports.plan = [
 exports.getRuns = [
   // authenticateRequest,
   function (req, res) {
+    let refresh = req.query.refresh;
     let key = 'RUNS';
     let retrievalFunction = () => getRuns();
-
-    getRuns()
+    if (refresh === 'true'){
+      cache.flush();
+    }
+    cache.get(key, retrievalFunction)
       .then((result) => {
         let grid = generateGrid(result.data);
         // poolSameRunLength(grid);

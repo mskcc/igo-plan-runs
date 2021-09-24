@@ -33,16 +33,6 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <Router>
         <Header />
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/plan">Plan</Link>
-            </li>
-          </ul>
-        </nav>
 
         <Switch>
           <Route exact path="/" component={Table} />
