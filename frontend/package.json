@@ -23,7 +23,7 @@
     "start": "react-scripts start",
     "clean": "rm -rf node_modules && touch package-lock.json && rm package-lock.json",
     "lint": "./node_modules/.bin/eslint --fix .",
-    "build": "npm run config-prod && npm run lint && react-scripts build",
+    "build": "npm run lint && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
