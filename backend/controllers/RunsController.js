@@ -2,7 +2,7 @@ const apiResponse = require('../helpers/apiResponse');
 // const { authenticateRequest } = require('../middlewares/jwt-cookie');
 const { getRuns } = require('../services/services');
 const Cache = require('../helpers/cache');
-const ttl = 60 * 15 * 1; // cache for 15 min
+const ttl = 60 * 60 * 1; // cache for 1 hour
 const cache = new Cache(ttl); // Create a new cache service instance
 const { logger } = require('../helpers/winston');
 const { poolSameRunLength } = require('./PoolFunctions');
@@ -51,6 +51,7 @@ const columns = [
 ];
 
 const groupColumn = [
+  { columnHeader: 'include',data: 'isIncluded', type: 'checkbox', editor: false },
   { columnHeader: 'Group ID', data: 'groupID', editor: false },
   { columnHeader: 'Pool', data: 'poolID', editor: false },
   { columnHeader: 'Sample ID', data: 'sampleID', editor: false },
@@ -85,6 +86,7 @@ exports.plan = [
         runLengthGroup.forEach((sampleList, index) => { 
           sampleList.forEach((element) => {
             element.groupID = index + 1;
+            element.isIncluded = true;
             runTypeResultList.push(element);
           }) 
         });
