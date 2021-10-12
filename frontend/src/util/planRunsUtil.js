@@ -6,11 +6,11 @@
  */
 export function groupSampleByRunType(sampleObjectList){
     const runTypeList = new Map();
-    for (let i = 0; i < sampleObjectList.length; i++){
-        if(runTypeList.has(sampleObjectList[i].runLength)){
-            runTypeList.get(sampleObjectList[i].runLength).push(sampleObjectList[i]);
+    for (const sample of sampleObjectList){
+        if(runTypeList.has(sample.runLength)){
+            runTypeList.get(sample.runLength).push(sample);
         }else{
-            runTypeList.set(sampleObjectList[i].runLength, [sampleObjectList[i]]);
+            runTypeList.set(sample.runLength, [sample]);
         }
     }  
     return(runTypeList);
@@ -26,8 +26,8 @@ export function groupSampleByRunType(sampleObjectList){
  * @returns true if collision happens under situation of certain number of mismatch allowed
  */
 function barcodeCollision(seq1, seq2, length, numOfMismatch){
-    var seq1_frag = seq1.substr(0,length);
-    var seq2_frag = seq2.substr(0,length);
+    const seq1_frag = seq1.substr(0,length);
+    const seq2_frag = seq2.substr(0,length);
     var mismatch1 = 0;
     var mismatch2 = 0;
     if (seq1.includes('-')){
@@ -47,7 +47,11 @@ function barcodeCollision(seq1, seq2, length, numOfMismatch){
                 mismatch1 = mismatch1 + 1;
             }
         }
-    }               
+    } 
+    /**
+     * By default, bcl2fastq allows 1 mismatch in each barcode. Barcodes with too few mismatches are ambiguous 
+     * Barcodes with too few mismatches are ambiguous ( less than 2 times the number of mismatches plus 1)
+     */        
     if (mismatch1 <= numOfMismatch * 2 && mismatch2 <= numOfMismatch * 2){
         return true;
     } else{
@@ -66,14 +70,13 @@ function barcodeCollision(seq1, seq2, length, numOfMismatch){
  */
 function listBarcodeCollision(seqList1, seqList2, numOfMismatch){
     //merge single barcode/list barcode into one array
-    var emptyList = [];
-    emptyList.push(seqList1, seqList2);
-    var newSeqList = emptyList.flat();
+    const newSeqList = [];
+    newSeqList.push(...seqList1, ...seqList2);
     //get minimum barcode length
     var minLength = 30;
-    for (let i = 0; i < newSeqList.length; i++){
-        if(newSeqList[i].length < minLength){
-            minLength = newSeqList[i].length;
+    for (const sample of newSeqList){
+        if(sample.length < minLength){
+            minLength = sample.length;
         }
     }
     //check barcode collision one by one
@@ -166,7 +169,7 @@ export function getCollisionGroup(sampleList){
             let count = 0;
             for(let j = 0; j < collisionList1.length; j++){ 
                 if((i != j) && (sampleBarcodeCollision(collisionList1[i], collisionList1[j],0))){
-                    count = count + 1;
+                    count += 1;
                 }
             }
             collisionMap.set(collisionList1[i], count);
@@ -181,11 +184,11 @@ export function getCollisionGroup(sampleList){
 
     function sortSamplesByProject(collisionListLibrary) {
         var projectMap = new Map();
-        for (let i = 0; i < collisionListLibrary.length; i++){
-            if (projectMap.has(collisionListLibrary[i].requestId)){
-                projectMap.get(collisionListLibrary[i].requestId).push(collisionListLibrary[i]);
+        for (const library of collisionListLibrary){
+            if (projectMap.has(library.requestId)){
+                projectMap.get(library.requestId).push(library);
             }else{
-                projectMap.set(collisionListLibrary[i].requestId, [collisionListLibrary[i]]);
+                projectMap.set(library.requestId, [library]);
             }
         }
         const projectMapSorted = new Map([...projectMap.entries()].sort());
