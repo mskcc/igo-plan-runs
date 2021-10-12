@@ -6,7 +6,7 @@ import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.css';
 import LoadingOverlay from 'react-loading-overlay';
 import { plan } from './services/services';
-
+import { rePlan } from './util/rePlan';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -39,6 +39,10 @@ function Plan() {
         exportExcel(samplesForPooling, columns);
     };
 
+    const handleRePlan = () =>{
+        setGroups(rePlan(samplesForPooling));
+    }
+
     async function processPoolInfo() {
         plan().then((result) => {
             setGroups(result.rows);
@@ -59,12 +63,16 @@ function Plan() {
                     <Button id='gridExport' onClick={handleExport} color='primary' variant='contained' type='submit'>
                         Export Excel
                     </Button>
+
+                    <Button id='gridExport' onClick={handleRePlan} color='primary' variant='contained' type='submit'>
+                        Redo Planning
+                    </Button>
                 </div>
                 <HotTable
                     ref={hotTableComponent}
                     data={samplesForPooling}
                     search='true'
-                    colHeaders={columns ? Object.keys(columns).map((el) => columns[el].columnHeader) : ''}
+                    colHeaders= {columns ? Object.keys(columns).map((el) => columns[el].columnHeader) : ''}
                     columns={columns}
                     filters='true'
                     columnSorting={sorting}

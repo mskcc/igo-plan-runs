@@ -51,6 +51,7 @@ const columns = [
 ];
 
 const groupColumn = [
+  { columnHeader: 'include',data: 'isIncluded', type: 'checkbox', editor: false },
   { columnHeader: 'Group ID', data: 'groupID', editor: false },
   { columnHeader: 'Pool', data: 'poolID', editor: false },
   { columnHeader: 'Sample ID', data: 'sampleID', editor: false },
@@ -85,6 +86,7 @@ exports.plan = [
         runLengthGroup.forEach((sampleList, index) => { 
           sampleList.forEach((element) => {
             element.groupID = index + 1;
+            element.isIncluded = true;
             runTypeResultList.push(element);
           }) 
         });
