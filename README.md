@@ -20,6 +20,9 @@ $ npm install && npm run start
 ```
 
 ## Deployment
+1. Modify `frontend/src/configs/config.js` w/ `DEV_HOST` and/or `PROD_HOST`
+
+2.
 ```
 cd frontend
 npm install && npm build
