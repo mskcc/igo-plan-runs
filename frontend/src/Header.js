@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Avatar, AppBar, Toolbar, Button, Typography, makeStyles } from '@material-ui/core';
+import { HOME } from './configs/config.js';
 
 import logo from './logo.png';
 
@@ -17,14 +18,14 @@ function Header() {
         </Typography>
 
         <Button>
-          <NavLink to='/' className={'mskcc-white nav-inactive'}>
+          <NavLink to={`${HOME}/`} className={'mskcc-white nav-inactive'}>
             <Typography color='inherit' variant='h6'>
-                Home
-            </Typography>                  
+              Home
+            </Typography>
           </NavLink>
         </Button>
         <Button>
-          <NavLink to='/Plan' className={'mskcc-white nav-inactive'}>
+          <NavLink to={`${HOME}/plan`} className={'mskcc-white nav-inactive'}>
             <Typography color='inherit' variant='h6'>
               Plan
             </Typography>

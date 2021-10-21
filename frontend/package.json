@@ -20,11 +20,11 @@
     "react-scripts": "^3.4.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "REACT_APP_ENV=dev react-scripts start",
     "clean": "rm -rf node_modules && touch package-lock.json && rm package-lock.json",
     "lint": "./node_modules/.bin/eslint --fix .",
-    "build": "npm run lint && react-scripts build",
-    "test": "react-scripts test",
+    "build": "npm run lint && REACT_APP_ENV=prod react-scripts build",
+    "test": "REACT_APP_ENV=qa react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BACKEND } from '../configs/config';
+import { BACKEND } from '../configs/config.js';
 
 // // Check for authorization error
 // axios.interceptors.response.use(

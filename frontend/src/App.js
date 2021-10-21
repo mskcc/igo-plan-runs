@@ -6,6 +6,7 @@ import Header from './Header';
 import Table from './Table';
 import Plan from './Plan';
 import { Tab } from '@material-ui/core';
+import { HOME } from './configs/config.js';
 
 const theme = createMuiTheme({
   typography: {
@@ -35,8 +36,8 @@ function App() {
         <Header />
 
         <Switch>
-          <Route exact path="/" component={Table} />
-          <Route exact path="/plan" component={Plan} />
+          <Route exact path={`${HOME}/`} component={Table} />
+          <Route exact path={`${HOME}/plan`} component={Plan} />
         </Switch>
       </Router>
     </MuiThemeProvider>
