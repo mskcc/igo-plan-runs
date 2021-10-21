@@ -21,8 +21,9 @@ loggers.add('logger', {
   ],
 });
 
-const jwtInCookie = require('jwt-in-cookie');
-jwtInCookie.configure({ secret: process.env.JWT_SECRET });
+# run-planner will not use a cookie
+#const jwtInCookie = require('jwt-in-cookie');
+#jwtInCookie.configure({ secret: process.env.JWT_SECRET });
 
 const app = express();
 
