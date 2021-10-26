@@ -32,18 +32,18 @@ function barcodeCollision(seq1, seq2, length, numOfMismatch){
     var mismatch2 = 0;
     if (seq1.includes('-')){
         for (let i = 0; i < seq1_frag.indexOf('-'); i++){
-            if (seq1_frag[i] != seq2_frag[i]){
+            if (seq1_frag[i] !== seq2_frag[i]){
                 mismatch1 = mismatch1 + 1;
             }
         }
         for (let i = seq1_frag.indexOf('-'); i < seq1_frag.length; i++){
-            if (seq1_frag[i] != seq2_frag[i]){
+            if (seq1_frag[i] !== seq2_frag[i]){
                 mismatch2 = mismatch2 + 1;
             }
         }
     } else{
         for (let i = 0; i < length; i++){
-            if (seq1_frag[i] != seq2_frag[i]){
+            if (seq1_frag[i] !== seq2_frag[i]){
                 mismatch1 = mismatch1 + 1;
             }
         }
@@ -70,8 +70,9 @@ function barcodeCollision(seq1, seq2, length, numOfMismatch){
  */
 function listBarcodeCollision(seqList1, seqList2, numOfMismatch){
     //merge single barcode/list barcode into one array
-    const newSeqList = [];
-    newSeqList.push(...seqList1, ...seqList2);
+    var emptyList = [];
+    emptyList.push(seqList1, seqList2);
+    var newSeqList = emptyList.flat();
     //get minimum barcode length
     var minLength = 30;
     for (const sample of newSeqList){
@@ -126,7 +127,7 @@ function checkPoolNormal(pool1, pool2, numOfMismatch){
     }
     for (let i = 0; i < pool1.barcodeSeq.length; i++){
         for (let j = 0; j < pool2.barcodeSeq.length; j++){
-            if (barcodeCollision(pool1.barcodeSeq[i], pool2.barcodeSeq[j],minLength,numOfMismatch) && !(i == 0 && j == 0)){
+            if (barcodeCollision(pool1.barcodeSeq[i], pool2.barcodeSeq[j],minLength,numOfMismatch) && !(i === 0 && j === 0)){
                 return true;
             }
         }
@@ -168,7 +169,7 @@ export function getCollisionGroup(sampleList){
         for(let i = 0; i < collisionList1.length; i++){
             let count = 0;
             for(let j = 0; j < collisionList1.length; j++){ 
-                if((i != j) && (sampleBarcodeCollision(collisionList1[i], collisionList1[j],0))){
+                if((i !== j) && (sampleBarcodeCollision(collisionList1[i], collisionList1[j],0))){
                     count += 1;
                 }
             }
@@ -205,8 +206,7 @@ export function getCollisionGroup(sampleList){
     // seperate the samples into freeList and collisionList based on barcode
     for(let i = 0; i < sampleList.length; i++){
         for(let j = 0; j < sampleList.length; j++){
-            let collision = false;
-            if((i != j) && (sampleBarcodeCollision(sampleList[i], sampleList[j],0))){
+            if((i !== j) && (sampleBarcodeCollision(sampleList[i], sampleList[j],0))){
                     //remove the sample with collision barcode from freeList
                     for(let m = 0; m < freeList.length; m++){ 
                         if (freeList[m] === sampleList[i]) { 
@@ -229,7 +229,7 @@ export function getCollisionGroup(sampleList){
     var collisionPoolSorted = makeSortedCollisionList(collisionListPool);
     var collisionListSorted = collisionListLibSorted.concat(collisionPoolSorted);
     for (let i = 0; i < collisionListSorted.length; i++){
-        if (groupList.length != 0){
+        if (groupList.length !== 0){
             for (let x = 0; x < groupList.length; x++){
                 var add = true;
                 for(let y = 0; y < groupList[x].length; y++){
@@ -238,12 +238,12 @@ export function getCollisionGroup(sampleList){
                         break;
                     }
                 }
-                if(add == true){
+                if(add === true){
                     groupList[x].push(collisionListSorted[i]);
                     break;
                 }
             }
-            if(add == false){
+            if(add === false){
                 groupList.push([collisionListSorted[i]]);
             }
         }else{
