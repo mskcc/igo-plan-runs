@@ -16,7 +16,10 @@ $ npm install && npm run start
 $ ls
 Makefile        README.md       assets          backend         frontend
 $ cd frontend
-$ npm install && npm run start
+$ npm install
+# TODO - avoid this
+$ rm -rf node_modules/webpack-dev-server/node_modules/fsevents
+$ npm run start
 ```
 
 ## Deployment
